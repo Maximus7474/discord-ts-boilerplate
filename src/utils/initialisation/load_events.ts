@@ -15,7 +15,7 @@ export default (client: DiscordClient) => {
         try {
             const eventModule = require(filePath);
 
-            if (!eventModule && eventModule.default) {
+            if (eventModule && eventModule.default) {
                 const { default: event } = eventModule as { default: EventHandler };
 
                 const eventData = event.register();
