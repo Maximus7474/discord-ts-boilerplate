@@ -1,5 +1,8 @@
 # Discord TS Boilerplate
 
+> [!IMPORTANT]  
+> This repository is work in progress.
+
 ## Setup
 Copy the `.env.example` file to `.env`
 ```bash
