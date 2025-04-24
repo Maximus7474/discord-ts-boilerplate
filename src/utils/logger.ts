@@ -41,7 +41,7 @@ class Logger {
      * @param args - The arg(s) to log.
      */
     info(...args: any[]): void {
-        console.log(`${this.timestamp()} [${(this.origin)}] ${this.cyan(`[INFO]`)}`, ...args);
+        console.log(`${this.timestamp()} ${this.cyan(`[INFO]`)} (${(this.origin)})`, ...args);
     }
 
     /**
@@ -49,7 +49,7 @@ class Logger {
      * @param args - The arg(s) to log.
      */
     success(...args: any[]): void {
-        console.log(`${this.timestamp()} [${(this.origin)}] ${this.green(`[SUCCESS]`)}`, ...args);
+        console.log(`${this.timestamp()} ${this.green(`[SUCCESS]`)} (${(this.origin)})`, ...args);
     }
 
     /**
@@ -57,7 +57,7 @@ class Logger {
      * @param args - The arg(s) to log.
      */
     warn(...args: any[]): void {
-        console.warn(`${this.timestamp()} [${(this.origin)}] ${this.yellow(`[WARN]`)}`, ...args);
+        console.warn(`${this.timestamp()} ${this.yellow(`[WARN]`)} (${(this.origin)})`, ...args);
     }
 
     /**
@@ -65,7 +65,7 @@ class Logger {
      * @param args - The arg(s) to log.
      */
     error(...args: any[]): void {
-        console.error(`${this.timestamp()} [${(this.origin)}] ${this.red(`[ERROR]`)}`, ...args);
+        console.error(`${this.timestamp()} ${this.red(`[ERROR]`)} (${(this.origin)})`, ...args);
     }
 }
 
