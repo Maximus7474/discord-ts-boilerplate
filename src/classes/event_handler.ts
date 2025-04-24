@@ -6,6 +6,7 @@ import Logger from "../utils/logger";
 export default class EventHandler {
 
     private logger: Logger;
+    private name: string;
     private eventName: keyof ClientEvents;
     private type: "on"|"once";
     private setup?: (logger: Logger, client: DiscordClient) => void;
@@ -19,6 +20,7 @@ export default class EventHandler {
         setup?: (logger: Logger, client: DiscordClient) => void,
     ) {
         this.logger = new Logger(name);
+        this.name = name;
         this.eventName = eventName;
         this.type = type;
         this.callback = callback;
@@ -29,6 +31,7 @@ export default class EventHandler {
 
     register () {
         return {
+            name: this.name,
             event: this.eventName,
             type: this.type,
         }
