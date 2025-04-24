@@ -1,0 +1,16 @@
+{
+  "name": "discord-ts-boilerplate",
+  "version": "0.0.0",
+  "description": "A discord bot built in TypeScript utilising discord.js",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "discordbot",
+    "discord.js",
+    "typescript"
+  ],
+  "author": "Maximus7474",
+  "license": "MIT"
+}
