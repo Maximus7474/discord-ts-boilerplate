@@ -27,7 +27,3 @@ client.commands = new Collection();
 LoadCommands(client);
 
 client.login(Config.DISCORD_BOT_TOKEN);
-
-client.once(Events.ClientReady, (client) => {
-    logger.success(`Booted up and logged in as @${client.user.username}#${client.user.discriminator}`)
-});
