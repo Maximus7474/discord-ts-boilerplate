@@ -1,26 +1,7 @@
-import * as fs from 'fs';
 import * as path from 'path';
 import SlashCommand from '../../classes/slash_command';
 import { DiscordClient } from '../../types/client';
-
-function getFilesFromDir(dirPath: string): string[] {
-    const files: string[] = [];
-
-    const items = fs.readdirSync(dirPath);
-
-    items.forEach((item) => {
-        const itemPath = path.join(dirPath, item);
-        const stats = fs.statSync(itemPath);
-
-        if (stats.isDirectory()) {
-            files.push(...getFilesFromDir(itemPath));
-        } else if (stats.isFile() && (item.endsWith('.ts') || item.endsWith('.js'))) {
-            files.push(itemPath);
-        }
-    });
-
-    return files;
-}
+import { getFilesFromDir } from '../utils';
 
 export default (client: DiscordClient) => {
     const commands = getFilesFromDir(path.join(__dirname, '../../commands'));
