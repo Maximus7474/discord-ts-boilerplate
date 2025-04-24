@@ -9,8 +9,7 @@ export default class EventHandler {
     private eventName: keyof ClientEvents;
     private type: "on"|"once";
     private setup?: (logger: Logger, client: DiscordClient) => void;
-    
-    callback: (logger: Logger, client: DiscordClient, ...args: any[]) => void;
+    private callback: (logger: Logger, client: DiscordClient, ...args: any[]) => void;
 
     constructor (
         name: string,
@@ -38,5 +37,13 @@ export default class EventHandler {
     initialize (client: DiscordClient) {
         if (!this.setup) return;
         this.setup(this.logger, client);
+    }
+
+    call (client: DiscordClient, ...args: any[]) {
+        if (!this.callback) {
+            this.logger.error('No Callback is defined for the event !');
+            return;
+        }
+        this.callback(this.logger, client, ...args);
     }
 }
