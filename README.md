@@ -21,6 +21,12 @@ npm run deploy
 pnpm deploy
 ```
 
+## Deploying
+The ts code is built using `tsc`, using the `scripts/build.js` file it also transfers over the `base.sql` files from the database folder allowing it to run smoothly. Building does not deploy the slash commands to Discord's API, you'll still need to run the `deploy` script to do so.
+
+Please note that the deploy script will only work with a built project, it reads the data for the commands from the `dist/` directory, so it will fail if you haven't run the build script.
+
+
 ## DO NOT MAKE THE .env FILE PUBLIC
 By default, `.env` is git ignored (meaning it is ignored by git). If you disable this, there can be huge security risks such as
 - Hackers being able to use your authentication token and using it for malicious purposes
