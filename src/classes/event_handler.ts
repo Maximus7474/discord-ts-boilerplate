@@ -19,7 +19,7 @@ export default class EventHandler {
         callback: (logger: Logger, client: DiscordClient, ...args: any[]) => void,
         setup?: (logger: Logger, client: DiscordClient) => void,
     ) {
-        this.logger = new Logger(name);
+        this.logger = new Logger(`\x1b[35mEVT\x1b[0m:${name}`);
         this.name = name;
         this.eventName = eventName;
         this.type = type;
