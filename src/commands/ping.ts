@@ -5,7 +5,8 @@ export default new SlashCommand(
     'ping',
     true,
     new SlashCommandBuilder()
-    .setName('ping'),
+        .setName('ping')
+        .setDescription('Ping the bot to check if it is alive !'),
     async (logger, client, interaction) => {
         logger.success('Successfully received usage of /ping from discord API');
         await interaction.reply({
