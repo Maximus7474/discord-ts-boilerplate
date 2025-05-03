@@ -5,28 +5,62 @@
 > [!IMPORTANT]  
 > This repository is work in progress.
 
-## Setup
-Copy the `.env.example` file to `.env`
-```bash
-cp .env.template .env
-```
+---
 
-Replace the `DISCORD_BOT_TOKEN` in the `.env` file with your own Authentication Token given to you by Discord in their portal 
-Replace the `MAIN_GUIlD_ID` in the `.env` file with the discord ID of your main discord guild 
+## 📦 Setup
 
+1. Copy the `.env.example` file to `.env`:
+   ```bash
+   cp .env.template .env
+   ```
 
-## Deploying
-The ts code is built using `tsc`, using the `scripts/build.js` file it also transfers over the `base.sql` files from the database folder allowing it to run smoothly. Building does not deploy the slash commands to Discord's API, you'll still need to run the `deploy` script to do so.
+2. Replace the following values in the `.env` file:
+   - `DISCORD_BOT_TOKEN`: Your bot's authentication token from Discord's developer portal.
+   - `MAIN_GUILD_ID`: The Discord ID of your main guild.
 
-Please note that the deploy script will only work with a built project, it reads the data for the commands from the `dist/` directory, so it will fail if you haven't run the build script.
+---
 
-## Database Management
-The current bot "supports" multiple database systems, however is only configured to run with `sqlite`.
-The project is open to external contributions, such as creating integrations for other database systems (mysql, mariadb, postgres, mongodb, etc...). However the main point of *concern* is that I want to avoid adding dependencies to the project that will not be used.
+## 🚀 Deploying
 
-## DO NOT MAKE THE .env FILE PUBLIC
-By default, `.env` is git ignored (meaning it is ignored by git). If you disable this, there can be huge security risks such as
-- Hackers being able to use your authentication token and using it for malicious purposes
-- Bad in general
+- The TypeScript code is built using `tsc`.  
+- The `scripts/build.js` file also transfers the `base.sql` files from the `database` folder to ensure smooth operation.
 
-If you do not touch the `.gitignore` then you should be fine. But be sure not to remove the `.env` part from the `.gitignore`.
+**Note:**  
+Building the project does not deploy the slash commands to Discord's API. You must run the `deploy` script to do so.
+
+### Deployment Steps:
+1. Build the project:
+   ```bash
+   npm run build
+   ```
+2. Deploy the slash commands:
+   ```bash
+   npm run deploy
+   ```
+
+**Important:**  
+The deploy script reads command data from the `dist/` directory. Ensure you run the build script before deploying.
+
+---
+
+## 🗄️ Database Management
+
+- The bot currently supports multiple database systems but is configured to run with `sqlite` by default.
+- Contributions for integrating other database systems (e.g., MySQL, MariaDB, PostgreSQL, MongoDB) are welcome.  
+  However, the project aims to avoid adding unused dependencies.
+
+---
+
+## ⚠️ Security Warning: DO NOT MAKE THE `.env` FILE PUBLIC
+
+By default, the `.env` file is ignored by Git (via `.gitignore`).  
+If you disable this, it can lead to severe security risks, such as:
+
+- Hackers gaining access to your authentication token and using it maliciously.
+- Other unintended consequences.
+
+**To stay safe:**
+- Do not remove `.env` from the `.gitignore` file.
+- Ensure your `.env` file remains private.
+
+---
