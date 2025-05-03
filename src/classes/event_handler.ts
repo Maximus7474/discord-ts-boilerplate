@@ -65,7 +65,11 @@ export default class EventHandler {
      */
     initialize (client: DiscordClient): void {
         if (!this.setup) return;
-        this.setup(this.logger, client);
+        try {
+            this.setup(this.logger, client);
+        } catch (error) {
+            this.logger.error('Error during setup:', error);
+        }
     }
 
     /**
