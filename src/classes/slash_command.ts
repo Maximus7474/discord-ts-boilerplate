@@ -6,22 +6,30 @@ import Logger from "../utils/logger";
 export default class SlashCommand {
 
     private logger: Logger;
+    private guildSpecific: boolean = false;
     private command_data: SlashCommandBuilder;
     private callback: (logger: Logger, client: DiscordClient, interaction: ChatInputCommandInteraction) => Promise<void>;
     private setup?: (logger: Logger, client: DiscordClient) => Promise<void>;
 
+
     constructor (
         name: string,
+        guildSpecific: boolean,
         slashcommand: SlashCommandBuilder,
         callback: (logger: Logger, client: DiscordClient, interaction: ChatInputCommandInteraction) => Promise<void>,
         setup?: (logger: Logger, client: DiscordClient) => Promise<void>,
     ) {
         this.logger = new Logger(name);
+        this.guildSpecific = guildSpecific;
         this.command_data = slashcommand;
         this.callback = callback;
         if (setup) {
             this.setup = setup;
         }
+    }
+
+    isGuildSpecific (): boolean {
+        return this.guildSpecific;
     }
 
     register () {
