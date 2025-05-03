@@ -39,20 +39,44 @@ export default class SlashCommand {
         this.setup = setup;
     }
 
+    /**
+     * Determines whether the slash command is specific to a guild.
+     *
+     * @returns {boolean} `true` if the command is guild-specific, otherwise `false`.
+     */
     isGuildSpecific (): boolean {
         return this.guildSpecific;
     }
 
-    register () {
+    /**
+     * Registers the slash command by returning its command data.
+     *
+     * @returns The data representing the slash command.
+     */
+    register (): SlashCommandBuilder {
         return this.command_data;
     }
 
-    initialize (client: DiscordClient) {
+    /**
+     * Initializes the slash command by invoking the `setup` method if it is defined.
+     *
+     * @param client - The Discord client instance used to initialize the command.
+     */
+    initialize (client: DiscordClient): void {
         if (!this.setup) return;
         this.setup(this.logger, client);
     }
 
-    execute (client: DiscordClient, interaction: ChatInputCommandInteraction) {
+    /**
+     * Executes the slash command by invoking the associated callback function.
+     *
+     * @param client - The Discord client instance.
+     * @param interaction - The interaction object representing the slash command invocation.
+     * 
+     * @remarks
+     * If no callback function is defined, an error is logged and the method returns early.
+     */
+    execute (client: DiscordClient, interaction: ChatInputCommandInteraction): void {
         if (!this.callback) {
             this.logger.error('No callback function exists !');
             return;
