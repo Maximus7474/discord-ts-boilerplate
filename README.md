@@ -1,5 +1,7 @@
 # Discord TS Boilerplate
 
+*Inspired by [discord-js-template](https://github.com/Maximus7474/discord-js-template) originaly created by [Furious Feline](https://github.com/FissionFeline)*
+
 > [!IMPORTANT]  
 > This repository is work in progress.
 
