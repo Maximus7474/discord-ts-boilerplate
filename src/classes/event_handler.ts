@@ -2,6 +2,7 @@ import { ClientEvents } from "discord.js";
 import { DiscordClient } from "../types/client";
 
 import Logger from "../utils/logger";
+import { magenta } from "../utils/console_colours";
 
 /**
  * Represents an event handler for a Discord client.
@@ -32,7 +33,7 @@ export default class EventHandler {
         callback: (logger: Logger, client: DiscordClient, ...args: any[]) => void,
         setup?: (logger: Logger, client: DiscordClient) => void,
     ) {
-        this.logger = new Logger(`\x1b[35mEVT\x1b[0m:${name}`);
+        this.logger = new Logger(`${magenta('EVT')}:${name}`);
         this.name = name;
         this.eventName = eventName;
         this.type = type;
