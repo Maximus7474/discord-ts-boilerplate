@@ -36,9 +36,7 @@ export default class SlashCommand {
         this.guildSpecific = guildSpecific;
         this.command_data = slashcommand;
         this.callback = callback;
-        if (setup) {
-            this.setup = setup;
-        }
+        this.setup = setup;
     }
 
     isGuildSpecific (): boolean {
