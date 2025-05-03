@@ -2,6 +2,7 @@ import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { DiscordClient } from "../types/client";
 
 import Logger from "../utils/logger";
+import { magenta } from "../utils/console_colours";
 
 /**
  * Represents a Slash Command for a Discord bot.
@@ -31,7 +32,7 @@ export default class SlashCommand {
         callback: (logger: Logger, client: DiscordClient, interaction: ChatInputCommandInteraction) => Promise<void>,
         setup?: (logger: Logger, client: DiscordClient) => Promise<void>,
     ) {
-        this.logger = new Logger(`\x1b[35mCMD\x1b[0m:${name}`);
+        this.logger = new Logger(`${magenta('CMD')}:${name}`);
         this.guildSpecific = guildSpecific;
         this.command_data = slashcommand;
         this.callback = callback;
