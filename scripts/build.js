@@ -23,8 +23,5 @@ exec("tsc", (error, stdout, stderr) => {
 
         migrateSQLFiles();
         console.log("✅ SQL files migrated to dist folder.");
-
-        console.log("ℹ️  Proceeding with command registration.");
-        require("./register_commands.js");
     }
 });
