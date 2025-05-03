@@ -2,6 +2,8 @@ const { exec } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 
+const migrateSQLFiles = require("./migrate_database_templats.js");
+
 const distPath = path.join(__dirname, "../dist");
 
 if (fs.existsSync(distPath)) {
@@ -18,5 +20,11 @@ exec("tsc", (error, stdout, stderr) => {
     } else {
         console.log("✅ Build complete.");
         if (stdout) console.log(stdout);
+
+        migrateSQLFiles();
+        console.log("✅ SQL files migrated to dist folder.");
+
+        console.log("ℹ️  Proceeding with command registration.");
+        require("./register_commands.js");
     }
 });
