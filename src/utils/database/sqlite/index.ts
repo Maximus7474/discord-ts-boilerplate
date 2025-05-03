@@ -19,16 +19,39 @@ export default class SQLiteHandler {
         initSql.run();
     }
 
+    /**
+     * Executes a SQL query that does not return any result (e.g., INSERT, UPDATE, DELETE).
+     *
+     * @param query - The SQL query string to be executed.
+     * @param params - An optional array of parameters to bind to the query placeholders.
+     *                 Defaults to an empty array if not provided.
+     * 
+     * @throws {Error} If the query execution fails.
+     */
     run(query: string, params: any[] = []): void {
         const stmt = this.db.prepare(query);
         stmt.run(...params);
     }
 
+    /**
+     * Executes a SQL query to retrieve a single row from the database.
+     *
+     * @param query - The SQL query string to be executed.
+     * @param params - An optional array of parameters to bind to the query.
+     * @returns The first row of the result set as an object, or `undefined` if no rows are found.
+     */
     get(query: string, params: any[] = []): unknown {
         const stmt = this.db.prepare(query);
         return stmt.get(...params);
     }
 
+    /**
+     * Executes a SQL query and retrieves all matching rows from the database.
+     *
+     * @param query - The SQL query string to execute.
+     * @param params - An optional array of parameters to bind to the query. Defaults to an empty array.
+     * @returns An array of objects representing the rows returned by the query.
+     */
     all(query: string, params: any[] = []): unknown[] {
         const stmt = this.db.prepare(query);
         return stmt.all(...params);
