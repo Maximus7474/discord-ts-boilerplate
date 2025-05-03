@@ -19,7 +19,7 @@ export default class SlashCommand {
         callback: (logger: Logger, client: DiscordClient, interaction: ChatInputCommandInteraction) => Promise<void>,
         setup?: (logger: Logger, client: DiscordClient) => Promise<void>,
     ) {
-        this.logger = new Logger(name);
+        this.logger = new Logger(`\x1b[35mCMD\x1b[0m:${name}`);
         this.guildSpecific = guildSpecific;
         this.command_data = slashcommand;
         this.callback = callback;
