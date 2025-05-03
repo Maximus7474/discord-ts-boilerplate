@@ -10,7 +10,9 @@ export default new SlashCommand(
     async (logger, client, interaction) => {
         logger.success('Successfully received usage of /ping from discord API');
         await interaction.reply({
-            content: `Pong ! (${Date.now() - interaction.createdTimestamp} ms)`,
+            // Ping is calculated by subtracting the current timestamp from the interaction created timestamp
+            // This is not the best way to calculate ping, but it is a good approximation
+            content: `Pong ! (${interaction.createdTimestamp - Date.now()} ms)`,
             flags: MessageFlags.Ephemeral,
         })
     }
