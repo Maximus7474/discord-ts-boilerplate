@@ -38,9 +38,7 @@ export default class EventHandler {
         this.eventName = eventName;
         this.type = type;
         this.callback = callback;
-        if (setup) {
-            this.setup = setup;
-        }
+        this.setup = setup;
     }
 
     register () {
