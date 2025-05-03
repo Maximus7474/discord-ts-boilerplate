@@ -3,6 +3,10 @@ import { DiscordClient } from "../types/client";
 
 import Logger from "../utils/logger";
 
+/**
+ * Represents a Slash Command for a Discord bot.
+ * This class encapsulates the data and behavior required to define, register, and execute a slash command.
+ */
 export default class SlashCommand {
 
     private logger: Logger;
@@ -11,7 +15,15 @@ export default class SlashCommand {
     private callback: (logger: Logger, client: DiscordClient, interaction: ChatInputCommandInteraction) => Promise<void>;
     private setup?: (logger: Logger, client: DiscordClient) => Promise<void>;
 
-
+    /**
+     * Creates a new SlashCommand instance.
+     * 
+     * @param name - The name of the slash command.
+     * @param guildSpecific - Whether the command is specific to a guild.
+     * @param slashcommand - The SlashCommandBuilder instance containing the command's data.
+     * @param callback - The function to execute when the command is invoked.
+     * @param setup - (Optional) A setup function to initialize the command.
+     */
     constructor (
         name: string,
         guildSpecific: boolean,
