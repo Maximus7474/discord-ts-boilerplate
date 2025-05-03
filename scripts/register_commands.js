@@ -2,7 +2,7 @@ const { REST, Routes } = require('discord.js');
 const path = require('path');
 const fs = require('fs');
 
-const output = require('dotenv').config();
+require('dotenv').config();
 if (!process.env.DISCORD_BOT_TOKEN) {
     console.error('❌ Missing DISCORD_BOT_TOKEN in .env file.');
     process.exit(1);
@@ -40,7 +40,6 @@ for (const file of commandFiles) {
 console.log(`📜 Found ${commands.public.length} public commands and ${commands.guild.length} guild-specific commands.`);
 
 const rest = new REST({ version: '10' }).setToken(TOKEN);
-
 
 (async () => {
     try {
