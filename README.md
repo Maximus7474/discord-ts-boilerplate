@@ -26,6 +26,9 @@ The ts code is built using `tsc`, using the `scripts/build.js` file it also tran
 
 Please note that the deploy script will only work with a built project, it reads the data for the commands from the `dist/` directory, so it will fail if you haven't run the build script.
 
+## Database Management
+The current bot "supports" multiple database systems, however is only configured to run with `sqlite`.
+The project is open to external contributions, such as creating integrations for other database systems (mysql, mariadb, postgres, mongodb, etc...). However the main point of *concern* is that I want to avoid adding dependencies to the project that will not be used.
 
 ## DO NOT MAKE THE .env FILE PUBLIC
 By default, `.env` is git ignored (meaning it is ignored by git). If you disable this, there can be huge security risks such as
