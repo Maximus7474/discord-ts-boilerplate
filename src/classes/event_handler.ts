@@ -41,7 +41,16 @@ export default class EventHandler {
         this.setup = setup;
     }
 
-    register () {
+    /**
+     * Registers the event handler by returning an object containing
+     * the handler's name, event name, and type.
+     *
+     * @returns An object with the following properties:
+     * - `name`: The name of the event handler.
+     * - `event`: The name of the event this handler is associated with.
+     * - `type`: The type of the event handler.
+     */
+    register (): { name: string, event: keyof ClientEvents, type: "on"|"once" } {
         return {
             name: this.name,
             event: this.eventName,
@@ -49,12 +58,24 @@ export default class EventHandler {
         }
     }
 
-    initialize (client: DiscordClient) {
+    /**
+     * Initializes the event handler by executing the optional setup logic, if defined.
+     *
+     * @param client - The Discord client instance used for the setup process.
+     */
+    initialize (client: DiscordClient): void {
         if (!this.setup) return;
         this.setup(this.logger, client);
     }
 
-    call (client: DiscordClient, ...args: any[]) {
+    /**
+     * Invokes the callback function associated with the event, passing the provided arguments.
+     * Logs an error if no callback is defined for the event.
+     *
+     * @param client - The Discord client instance.
+     * @param args - Additional arguments to be passed to the callback function.
+     */
+    call (client: DiscordClient, ...args: any[]): void {
         if (!this.callback) {
             this.logger.error('No Callback is defined for the event !');
             return;
