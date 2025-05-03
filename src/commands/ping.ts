@@ -3,6 +3,7 @@ import SlashCommand from "../classes/slash_command";
 
 export default new SlashCommand(
     'ping',
+    true,
     new SlashCommandBuilder()
     .setName('ping'),
     async (logger, client, interaction) => {
