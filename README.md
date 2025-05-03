@@ -14,12 +14,6 @@ cp .env.template .env
 Replace the `DISCORD_BOT_TOKEN` in the `.env` file with your own Authentication Token given to you by Discord in their portal 
 Replace the `MAIN_GUIlD_ID` in the `.env` file with the discord ID of your main discord guild 
 
-Once your discord bot is generated and the token inserted, you will need to run the deployment command so that the slashcommands are all registered to Discords API.
-This is done via `npm` or `pnpm` depending on your preference, running the `deploy` script:
-```bash
-npm run deploy
-pnpm deploy
-```
 
 ## Deploying
 The ts code is built using `tsc`, using the `scripts/build.js` file it also transfers over the `base.sql` files from the database folder allowing it to run smoothly. Building does not deploy the slash commands to Discord's API, you'll still need to run the `deploy` script to do so.
