@@ -31,6 +31,12 @@ if (clearCommands) {
     console.log('🗑️  Clearing all commands...');
 } else {
     const commandsPath = path.join(__dirname, '../dist/commands');
+
+    if (!fs.existsSync(commandsPath)) {
+        console.error('❌ Commands directory not found. Please build the project first.');
+        process.exit(1);
+    }
+
     const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
     for (const file of commandFiles) {
