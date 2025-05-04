@@ -22,7 +22,7 @@ class Logger {
      * Log an informational message to the console.
      * @param args - The arg(s) to log.
      */
-    info(...args: any[]): void {
+    info(...args: unknown[]): void {
         console.log(`${this.timestamp()} ${cyan(`[INFO]   `)} (${(this.origin)})`, ...args);
     }
 
@@ -30,7 +30,7 @@ class Logger {
      * Log a success message to the console.
      * @param args - The arg(s) to log.
      */
-    success(...args: any[]): void {
+    success(...args: unknown[]): void {
         console.log(`${this.timestamp()} ${green(`[SUCCESS]`)} (${(this.origin)})`, ...args);
     }
 
@@ -38,7 +38,7 @@ class Logger {
      * Log a warning message to the console.
      * @param args - The arg(s) to log.
      */
-    warn(...args: any[]): void {
+    warn(...args: unknown[]): void {
         console.warn(`${this.timestamp()} ${yellow(`[WARN]   `)} (${(this.origin)})`, ...args);
     }
 
@@ -46,7 +46,7 @@ class Logger {
      * Log an error message to the console.
      * @param args - The arg(s) to log.
      */
-    error(...args: any[]): void {
+    error(...args: unknown[]): void {
         console.error(`${this.timestamp()} ${red(`[ERROR]  `)} (${(this.origin)})`, ...args);
     }
 }
