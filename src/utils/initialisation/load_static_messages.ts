@@ -43,7 +43,7 @@ export default (client: DiscordClient) => {
                 const handler = callbackHandler.get(customId);
                 console.log(customId, callbackHandler.keys());
                 if (handler) {
-                    await handler(client, interaction as ButtonInteraction|AnySelectMenuInteraction);
+                    await handler(client, interaction);
                 } else {
                     logger.warn(`No handler found for static message: ${customId}`);
                 }
