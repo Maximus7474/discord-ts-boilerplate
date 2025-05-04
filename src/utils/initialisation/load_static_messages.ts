@@ -25,7 +25,7 @@ export default (client: DiscordClient) => {
                     await message.initialize(client);
     
                     message.customIds.forEach((customId) => {
-                        callbackHandler.set(customId, message.handleInteraction);
+                        callbackHandler.set(customId, message.handleInteraction.bind(message));
                     });
 
                     logger.success(`Loaded static message: ${message.name}`)
