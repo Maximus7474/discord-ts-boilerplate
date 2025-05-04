@@ -3,6 +3,7 @@ import { DiscordClient } from "../types/client";
 
 import Logger from "../utils/logger";
 import { magenta } from "../utils/console_colours";
+import { EventHandlerCallback, EventHandlerSetup } from "../types/event_handler";
 
 /**
  * Represents an event handler for a Discord client.
@@ -14,8 +15,8 @@ export default class EventHandler {
     private name: string;
     private eventName: keyof ClientEvents;
     private type: "on"|"once";
-    private setup?: (logger: Logger, client: DiscordClient) => void;
-    private callback: (logger: Logger, client: DiscordClient, ...args: any[]) => void;
+    private setup?: EventHandlerSetup;
+    private callback: EventHandlerCallback;
 
     /**
      * Constructs an instance of the event handler.
@@ -30,8 +31,8 @@ export default class EventHandler {
         name: string,
         eventName: keyof ClientEvents,
         type: "on"|"once",
-        callback: (logger: Logger, client: DiscordClient, ...args: any[]) => void,
-        setup?: (logger: Logger, client: DiscordClient) => void,
+        callback: EventHandlerCallback,
+        setup?: EventHandlerSetup,
     ) {
         this.logger = new Logger(`${magenta('EVT')}:${name}`);
         this.name = name;
@@ -79,6 +80,7 @@ export default class EventHandler {
      * @param client - The Discord client instance.
      * @param args - Additional arguments to be passed to the callback function.
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     call (client: DiscordClient, ...args: any[]): void {
         if (!this.callback) {
             this.logger.error('No Callback is defined for the event !');
