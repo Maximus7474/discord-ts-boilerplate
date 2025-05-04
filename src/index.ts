@@ -3,9 +3,11 @@ import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
 import { DiscordClient } from './types/client';
 
 import Config from './utils/config';
+import Database from './utils/database';
+
 import LoadCommands from './utils/initialisation/load_commands';
 import LoadEvents from './utils/initialisation/load_events';
-import Database from './utils/database';
+import LoadStaticMessages from './utils/initialisation/load_static_messages';
 
 if (Database) Database.init();
 
@@ -27,5 +29,6 @@ client.commands = new Collection();
 
 LoadCommands(client);
 LoadEvents(client);
+LoadStaticMessages(client);
 
 client.login(Config.DISCORD_BOT_TOKEN);
