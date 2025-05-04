@@ -28,7 +28,7 @@ export default class SQLiteHandler {
      * 
      * @throws {Error} If the query execution fails.
      */
-    run(query: string, params: any[] = []): void {
+    run(query: string, params: unknown[] = []): void {
         const stmt = this.db.prepare(query);
         stmt.run(...params);
     }
@@ -40,7 +40,7 @@ export default class SQLiteHandler {
      * @param params - An optional array of parameters to bind to the query.
      * @returns The first row of the result set as an object, or `undefined` if no rows are found.
      */
-    get(query: string, params: any[] = []): unknown {
+    get(query: string, params: unknown[] = []): unknown {
         const stmt = this.db.prepare(query);
         return stmt.get(...params);
     }
@@ -52,7 +52,7 @@ export default class SQLiteHandler {
      * @param params - An optional array of parameters to bind to the query. Defaults to an empty array.
      * @returns An array of objects representing the rows returned by the query.
      */
-    all(query: string, params: any[] = []): unknown[] {
+    all(query: string, params: unknown[] = []): unknown[] {
         const stmt = this.db.prepare(query);
         return stmt.all(...params);
     }
