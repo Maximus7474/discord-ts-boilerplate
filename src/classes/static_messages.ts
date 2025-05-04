@@ -10,7 +10,7 @@ export default class StaticMessage {
     public customIds: string[];
     public name: string;
     private setup: (logger: Logger, client: DiscordClient) => Promise<void>;
-    private callback: (logger: Logger, client: DiscordClient, interaction: ButtonInteraction|AnySelectMenuInteraction) => Promise<void>
+    private callback?: (logger: Logger, client: DiscordClient, interaction: ButtonInteraction|AnySelectMenuInteraction) => Promise<void>
 
     constructor (
         name: string,
@@ -37,6 +37,10 @@ export default class StaticMessage {
     }
 
     handleInteraction (client: DiscordClient, interaction: ButtonInteraction|AnySelectMenuInteraction): Promise<void> {
+        if (!this.callback) {
+            this.logger.error(`No callback found for interaction ID: ${interaction.customId}`);
+            return Promise.resolve();
+        }
         return this.callback(this.logger, client, interaction);
     }
 }
