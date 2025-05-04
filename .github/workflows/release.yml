@@ -49,15 +49,24 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          pnpm version ${{ github.ref_name }} --git-tag-version false
+          CURRENT_VERSION=$(jq -r '.version' package.json)
+          if [ "$CURRENT_VERSION" != "${{ github.ref_name }}" ]; then
+            pnpm version ${{ github.ref_name }} --git-tag-version false
+          else
+            echo "Version in package.json is already up-to-date."
+          fi
 
       - name: Update repository
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          if [ "$(git status --porcelain)" != "" ]; then
           git add .
           git commit -am 'chore(package): updated version to ${{ github.ref_name }}'
           git push
+            else
+          echo "No changes to commit."
+            fi
 
       - name: Create Release
         uses: 'marvinpinto/action-automatic-releases@v1.2.1'
