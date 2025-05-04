@@ -9,10 +9,10 @@ const logger = new Logger('LoadCommands');
 export default (client: DiscordClient) => {
     const commands = getFilesFromDir(path.join(__dirname, '../../commands'));
 
-    commands.forEach((file) => {
+    commands.forEach(async (file) => {
         const filePath = path.join(file);
         try {
-            const commandModule = require(filePath);
+            const commandModule = await import(filePath);
 
             if (commandModule && commandModule.default) {
                 const { default: command } = commandModule as { default: SlashCommand };

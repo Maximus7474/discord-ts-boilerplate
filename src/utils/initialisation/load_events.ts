@@ -10,10 +10,10 @@ export default (client: DiscordClient) => {
     const eventDir = path.join(__dirname, '../../events');
     const events = getFilesFromDir(eventDir);
 
-    events.forEach((file) => {
+    events.forEach(async (file) => {
         const filePath = path.join(file);
         try {
-            const eventModule = require(filePath);
+            const eventModule = await import(filePath);
 
             if (eventModule && eventModule.default) {
                 const { default: event } = eventModule as { default: EventHandler };

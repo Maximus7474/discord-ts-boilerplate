@@ -17,7 +17,7 @@ export default (client: DiscordClient) => {
         messages.forEach(async (file) => {
             const filePath = path.join(file);
             try {
-                const staticMessageModule = require(filePath);
+                const staticMessageModule = await import(filePath);
     
                 if (staticMessageModule && staticMessageModule.default) {
                     const { default: message } = staticMessageModule as { default: StaticMessage };
