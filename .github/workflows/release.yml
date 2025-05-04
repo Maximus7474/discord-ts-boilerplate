@@ -50,7 +50,7 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           CURRENT_VERSION=$(jq -r '.version' package.json)
-          if [ "$CURRENT_VERSION" != "${{ github.ref_name }}" ]; then
+          if [ "v$CURRENT_VERSION" != "${{ github.ref_name }}" ]; then
             pnpm version ${{ github.ref_name }} --git-tag-version false
           else
             echo "Version in package.json is already up-to-date."
