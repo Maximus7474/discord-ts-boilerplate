@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
-import { DiscordClient } from "../types/client";
+import { DiscordClient } from "../types";
 
 import Logger from "../utils/logger";
 import { magenta } from "../utils/console_colours";

@@ -1,6 +1,6 @@
 import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
 
-import { DiscordClient } from './types/client';
+import { DiscordClient } from './types';
 
 import Config from './utils/config';
 import Database from './utils/database';

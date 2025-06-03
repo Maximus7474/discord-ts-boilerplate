@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { DiscordClient } from '../../types/client';
+import { DiscordClient } from '../../types';
 import { getFilesFromDir } from '../utils';
 import EventHandler from '../../classes/event_handler';
 

@@ -1,9 +1,9 @@
 import { ClientEvents } from "discord.js";
-import { DiscordClient } from "../types/client";
+import { DiscordClient } from "../types";
 
 import Logger from "../utils/logger";
 import { magenta } from "../utils/console_colours";
-import { EventHandlerCallback, EventHandlerSetup } from "../types/event_handler";
+import { EventHandlerCallback, EventHandlerSetup } from "../types";
 
 /**
  * Represents an event handler for a Discord client.
