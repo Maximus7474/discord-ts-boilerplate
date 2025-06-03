@@ -4,6 +4,7 @@ import { getFilesFromDir } from '../utils';
 import EventHandler from '../../classes/event_handler';
 
 import Logger from '../logger';
+import { pathToFileURL } from 'url';
 const logger = new Logger('LoadEvents');
 
 export default (client: DiscordClient) => {
@@ -12,8 +13,10 @@ export default (client: DiscordClient) => {
 
     events.forEach(async (file) => {
         const filePath = path.join(file);
+        const fileUrl = pathToFileURL(filePath).href;
+
         try {
-            const eventModule = await import(filePath);
+            const eventModule = await import(fileUrl);
 
             if (eventModule && eventModule.default) {
                 const { default: event } = eventModule as { default: EventHandler };
