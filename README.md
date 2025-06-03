@@ -29,11 +29,11 @@ Building the project does not deploy the slash commands to Discord's API. You mu
 ### Deployment Steps:
 1. Build the project:
    ```bash
-   npm run build
+   pnpm run build
    ```
 2. Deploy the slash commands:
    ```bash
-   npm run deploy
+   pnpm run deploy
    ```
 
 **Important:**  
