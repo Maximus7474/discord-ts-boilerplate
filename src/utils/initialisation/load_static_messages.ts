@@ -25,7 +25,10 @@ export default (client: DiscordClient) => {
                 if (staticMessageModule && staticMessageModule.default) {
                     const { default: message } = staticMessageModule as { default: StaticMessage };
     
-                    await message.initialize(client);
+                    message.initialize(client)
+                    .catch((err) => {
+                        logger.error('Unable to initialize', path.basename(filePath), 'error:', err.message);
+                    });
     
                     message.customIds.forEach((customId) => {
                         callbackHandler.set(customId, message.handleInteraction.bind(message));
