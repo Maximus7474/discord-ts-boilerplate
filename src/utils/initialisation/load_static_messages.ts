@@ -5,6 +5,7 @@ import { getFilesFromDir } from '../utils';
 import Logger from '../logger';
 import StaticMessage from '../../classes/static_messages';
 import { AnySelectMenuInteraction, ButtonInteraction } from 'discord.js';
+import { pathToFileURL } from 'url';
 const logger = new Logger('LoadStaticMessages');
 
 export default (client: DiscordClient) => {
@@ -16,8 +17,10 @@ export default (client: DiscordClient) => {
     
         messages.forEach(async (file) => {
             const filePath = path.join(file);
+            const fileUrl = pathToFileURL(filePath).href;
+
             try {
-                const staticMessageModule = await import(filePath);
+                const staticMessageModule = await import(fileUrl);
     
                 if (staticMessageModule && staticMessageModule.default) {
                     const { default: message } = staticMessageModule as { default: StaticMessage };
