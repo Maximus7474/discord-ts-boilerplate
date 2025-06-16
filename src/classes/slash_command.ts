@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandOptionsOnlyBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js";
+import { AutocompleteInteraction, ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandOptionsOnlyBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js";
 import { DiscordClient } from "../types";
 
 import Logger from "../utils/logger";
@@ -17,6 +17,7 @@ export default class SlashCommand {
     private command_data: SlashCommandBuilders;
     private callback: (logger: Logger, client: DiscordClient, interaction: ChatInputCommandInteraction) => Promise<void>;
     private setup?: (logger: Logger, client: DiscordClient) => Promise<void>;
+    private autocomplete?: (logger: Logger, client: DiscordClient, interaction: AutocompleteInteraction) => Promise<void>;
 
     /**
      * Creates a new SlashCommand instance.
@@ -33,12 +34,14 @@ export default class SlashCommand {
         slashcommand: SlashCommandBuilders,
         callback: (logger: Logger, client: DiscordClient, interaction: ChatInputCommandInteraction) => Promise<void>,
         setup?: (logger: Logger, client: DiscordClient) => Promise<void>,
+        autocomplete?: (logger: Logger, client: DiscordClient, interaction: AutocompleteInteraction) => Promise<void>,
     ) {
         this.logger = new Logger(`${magenta('CMD')}:${name}`);
         this.guildSpecific = guildSpecific;
         this.command_data = slashcommand;
         this.callback = callback;
         this.setup = setup;
+        this.autocomplete = autocomplete;
     }
 
     /**
@@ -48,6 +51,15 @@ export default class SlashCommand {
      */
     isGuildSpecific (): boolean {
         return this.guildSpecific;
+    }
+
+    /**
+     * Specifies if command has an autocomplete callback.
+     *
+     * @returns {boolean} `true` if the command has an autocomplete callback, otherwise `false`.
+     */
+    hasAutocomplete (): boolean {
+        return this.autocomplete !== undefined;
     }
 
     /**
@@ -88,5 +100,13 @@ export default class SlashCommand {
             return;
         }
         this.callback(this.logger, client, interaction);
+    }
+
+    executeAutocomplete (client: DiscordClient, interaction: AutocompleteInteraction): void {
+        if (!this.autocomplete) {
+            this.logger.error('No autocomplete function exists !');
+            return;
+        }
+        this.autocomplete(this.logger, client, interaction);
     }
 }
