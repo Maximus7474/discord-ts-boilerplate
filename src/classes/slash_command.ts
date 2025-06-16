@@ -1,10 +1,8 @@
-import { AutocompleteInteraction, ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandOptionsOnlyBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js";
-import { DiscordClient } from "../types";
+import { AutocompleteInteraction, ChatInputCommandInteraction } from "discord.js";
+import { DiscordClient, SlashCommandBuilders, SlashCommandOptions } from "../types";
 
 import Logger from "../utils/logger";
 import { magenta } from "../utils/console_colours";
-
-type SlashCommandBuilders = SlashCommandBuilder | SlashCommandOptionsOnlyBuilder | SlashCommandSubcommandsOnlyBuilder
 
 /**
  * Represents a Slash Command for a Discord bot.
@@ -14,31 +12,26 @@ export default class SlashCommand {
 
     private logger: Logger;
     private guildSpecific: boolean = false;
-    private command_data: SlashCommandBuilders;
+    private commandData: SlashCommandBuilders;
     private callback: (logger: Logger, client: DiscordClient, interaction: ChatInputCommandInteraction) => Promise<void>;
     private setup?: (logger: Logger, client: DiscordClient) => Promise<void>;
     private autocomplete?: (logger: Logger, client: DiscordClient, interaction: AutocompleteInteraction) => Promise<void>;
 
     /**
      * Creates a new SlashCommand instance.
-     * 
-     * @param name - The name of the slash command.
-     * @param guildSpecific - Whether the command is specific to a guild.
-     * @param slashcommand - The SlashCommandBuilder instance containing the command's data.
-     * @param callback - The function to execute when the command is invoked.
-     * @param setup - (Optional) A setup function to initialize the command.
+     *
+     * @param options - An object containing the configuration for the slash command.
+     * @param options.name - The name of the slash command.
+     * @param options.guildSpecific - (Optional) Whether the command is specific to a guild. Defaults to false.
+     * @param options.slashcommand - The SlashCommandBuilder instance containing the command's data.
+     * @param options.callback - The function to execute when the command is invoked.
+     * @param options.setup - (Optional) A setup function to initialize the command.
+     * @param options.autocomplete - (Optional) An autocomplete function for the command's options.
      */
-    constructor (
-        name: string,
-        guildSpecific: boolean,
-        slashcommand: SlashCommandBuilders,
-        callback: (logger: Logger, client: DiscordClient, interaction: ChatInputCommandInteraction) => Promise<void>,
-        setup?: (logger: Logger, client: DiscordClient) => Promise<void>,
-        autocomplete?: (logger: Logger, client: DiscordClient, interaction: AutocompleteInteraction) => Promise<void>,
-    ) {
+    constructor({ name, guildSpecific = false, slashcommand, callback, setup, autocomplete }: SlashCommandOptions) {
         this.logger = new Logger(`${magenta('CMD')}:${name}`);
         this.guildSpecific = guildSpecific;
-        this.command_data = slashcommand;
+        this.commandData = slashcommand;
         this.callback = callback;
         this.setup = setup;
         this.autocomplete = autocomplete;
@@ -68,7 +61,7 @@ export default class SlashCommand {
      * @returns The data representing the slash command.
      */
     register (): SlashCommandBuilders {
-        return this.command_data;
+        return this.commandData;
     }
 
     /**
