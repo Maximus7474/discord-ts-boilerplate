@@ -20,9 +20,11 @@ export default (client: DiscordClient) => {
             if (commandModule && commandModule.default) {
                 const { default: command } = commandModule as { default: SlashCommand };
 
-                client.commands.set(command.register().name, command);
+                const commandName = command.register().name;
 
-                logger.success(`Loaded /${command.register().name}`);
+                client.commands.set(commandName, command.execute.bind(command));
+
+                logger.success(`Loaded /${commandName}`);
             }
         } catch (error) {
             console.error(`Failed to load command ${file}:`, error);
