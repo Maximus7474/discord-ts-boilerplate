@@ -26,6 +26,7 @@ const client: DiscordClient = new Client({
 }) as DiscordClient;
 
 client.commands = new Collection();
+client.autocompleteCommands = new Collection();
 
 LoadCommands(client);
 LoadEvents(client);

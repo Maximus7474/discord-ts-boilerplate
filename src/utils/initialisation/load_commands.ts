@@ -24,6 +24,10 @@ export default (client: DiscordClient) => {
 
                 client.commands.set(commandName, command.execute.bind(command));
 
+                if (command.hasAutocomplete()) {
+                    client.autocompleteCommands.set(commandName, command.executeAutocomplete.bind(command));
+                }
+
                 logger.success(`Loaded /${commandName}`);
             }
         } catch (error) {
