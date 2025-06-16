@@ -1,13 +1,13 @@
 import { MessageFlags, SlashCommandBuilder } from "discord.js";
 import SlashCommand from "../classes/slash_command";
 
-export default new SlashCommand(
-    'ping',
-    true,
-    new SlashCommandBuilder()
+export default new SlashCommand({
+    name: 'ping',
+    guildSpecific: true,
+    slashcommand: new SlashCommandBuilder()
         .setName('ping')
         .setDescription('Ping the bot to check if it is alive !'),
-    async (logger, client, interaction) => {
+    callback: async (logger, client, interaction) => {
         logger.success('Successfully received usage of /ping from discord API');
         await interaction.reply({
             // Ping is calculated by subtracting the current timestamp from the interaction created timestamp
@@ -16,4 +16,4 @@ export default new SlashCommand(
             flags: MessageFlags.Ephemeral,
         })
     }
-);
+});

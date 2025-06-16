@@ -3,10 +3,10 @@ import { DiscordClient } from "../types";
 import Logger from "../utils/logger";
 import SlashCommand from "../classes/slash_command";
 
-const testAutocompleteCommand = new SlashCommand(
-    "testautocomplete",
-    false,
-    new SlashCommandBuilder()
+export default new SlashCommand({
+    name: "testautocomplete",
+    guildSpecific: false,
+    slashcommand: new SlashCommandBuilder()
         .setName("favoritefruit")
         .setDescription("A question to test autocomplete.")
         .addStringOption(option =>
@@ -14,7 +14,7 @@ const testAutocompleteCommand = new SlashCommand(
                 .setDescription("Choose an fruit from the list.")
                 .setAutocomplete(true) 
         ),
-    async (logger: Logger, client: DiscordClient, interaction: ChatInputCommandInteraction) => {
+    callback: async (logger: Logger, client: DiscordClient, interaction: ChatInputCommandInteraction) => {
         const selectedItem = interaction.options.getString("item");
         if (selectedItem) {
             await interaction.reply({ content: `You selected: **${selectedItem}**`, flags: MessageFlags.Ephemeral });
@@ -22,8 +22,7 @@ const testAutocompleteCommand = new SlashCommand(
             await interaction.reply({ content: "No fruit was selected :( .", flags: MessageFlags.Ephemeral });
         }
     },
-    undefined,
-    async (logger: Logger, client: DiscordClient, interaction: AutocompleteInteraction) => {
+    autocomplete: async (logger: Logger, client: DiscordClient, interaction: AutocompleteInteraction) => {
         const focusedValue = interaction.options.getFocused();
         const choices = ["apple", "banana", "orange", "grape", "strawberry", "blueberry", "kiwi", "mango", "pineapple"];
         
@@ -35,6 +34,4 @@ const testAutocompleteCommand = new SlashCommand(
         
         await interaction.respond(responseChoices);
     }
-);
-
-export default testAutocompleteCommand;
+});
