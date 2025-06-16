@@ -1,5 +1,5 @@
 import { ClientEvents } from "discord.js";
-import { DiscordClient } from "../types";
+import { DiscordClient, EventHandlerOptions } from "../types";
 
 import Logger from "../utils/logger";
 import { magenta } from "../utils/console_colours";
@@ -21,19 +21,14 @@ export default class EventHandler {
     /**
      * Constructs an instance of the event handler.
      *
-     * @param name - The name of the event handler.
-     * @param eventName - The name of the event from the `ClientEvents` that this handler listens to.
-     * @param type - Specifies whether the event handler should use "on" or "once" for the event listener.
-     * @param callback - The function to be executed when the event is triggered. Receives a logger, the Discord client, and additional event arguments.
-     * @param setup - (Optional) A function to perform setup logic. Receives a logger and the Discord client.
+     * @param options - An object containing the configuration for the event handler.
+     * @param options.name - The name of the event handler.
+     * @param options.eventName - The name of the event from the `ClientEvents` that this handler listens to.
+     * @param options.type - Specifies whether the event handler should use "on" or "once" for the event listener.
+     * @param options.callback - The function to be executed when the event is triggered. Receives a logger, the Discord client, and additional event arguments.
+     * @param options.setup - (Optional) A function to perform setup logic. Receives a logger and the Discord client.
      */
-    constructor (
-        name: string,
-        eventName: keyof ClientEvents,
-        type: "on"|"once",
-        callback: EventHandlerCallback,
-        setup?: EventHandlerSetup,
-    ) {
+    constructor({ name, eventName, type, callback, setup }: EventHandlerOptions) {
         this.logger = new Logger(`${magenta('EVT')}:${name}`);
         this.name = name;
         this.eventName = eventName;
