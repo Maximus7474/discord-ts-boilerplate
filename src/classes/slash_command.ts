@@ -1,8 +1,10 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandOptionsOnlyBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js";
 import { DiscordClient } from "../types";
 
 import Logger from "../utils/logger";
 import { magenta } from "../utils/console_colours";
+
+type SlashCommandBuilders = SlashCommandBuilder | SlashCommandOptionsOnlyBuilder | SlashCommandSubcommandsOnlyBuilder
 
 /**
  * Represents a Slash Command for a Discord bot.
@@ -12,7 +14,7 @@ export default class SlashCommand {
 
     private logger: Logger;
     private guildSpecific: boolean = false;
-    private command_data: SlashCommandBuilder;
+    private command_data: SlashCommandBuilders;
     private callback: (logger: Logger, client: DiscordClient, interaction: ChatInputCommandInteraction) => Promise<void>;
     private setup?: (logger: Logger, client: DiscordClient) => Promise<void>;
 
@@ -28,7 +30,7 @@ export default class SlashCommand {
     constructor (
         name: string,
         guildSpecific: boolean,
-        slashcommand: SlashCommandBuilder,
+        slashcommand: SlashCommandBuilders,
         callback: (logger: Logger, client: DiscordClient, interaction: ChatInputCommandInteraction) => Promise<void>,
         setup?: (logger: Logger, client: DiscordClient) => Promise<void>,
     ) {
@@ -53,7 +55,7 @@ export default class SlashCommand {
      *
      * @returns The data representing the slash command.
      */
-    register (): SlashCommandBuilder {
+    register (): SlashCommandBuilders {
         return this.command_data;
     }
 
