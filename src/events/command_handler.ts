@@ -11,6 +11,6 @@ export default new EventHandler (
         const command = client.commands.get(interaction.commandName);
         if (!command) return;
 
-        command.execute(client, interaction);
+        command(client, interaction);
     }
 );
