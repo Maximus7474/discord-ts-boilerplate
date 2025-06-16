@@ -1,10 +1,10 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, TextChannel } from "discord.js";
 import StaticMessage from "../classes/static_messages";
 
-export default new StaticMessage (
-    'EXAMPLE',
-    ['test_button'],
-    async (logger, client) => {
+export default new StaticMessage({
+    name: 'EXAMPLE',
+    customIds: ['test_button'],
+    setup: async (logger, client) => {
         const channelId = 'your-channel-id-here'; // Replace with your channel ID
         const channel = await client.channels.fetch(channelId) as TextChannel | null;
 
@@ -30,8 +30,8 @@ export default new StaticMessage (
 
         logger.info('Static message setup complete.');
     },
-    async (logger, client, interaction) => {
+    callback: async (logger, client, interaction) => {
         await interaction.reply({ content: 'This is an example static message!', ephemeral: true });
         logger.info('Static message sent.');
     }
-);
+});
