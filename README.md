@@ -2,6 +2,14 @@
 
 *Inspired by [discord-js-template](https://github.com/Maximus7474/discord-js-template) originaly created by [Furious Feline](https://github.com/FissionFeline)*
 
+---
+
+## Table of Contents
+  - [📦 Setup](#-setup)
+  - [🚀 Deploying](#-deploying)
+    - [Deployment Steps:](#deployment-steps)
+  - [🗄️ Database Management](#️-database-management)
+  - [⚠️ Security Warning: DO NOT MAKE THE `.env` FILE PUBLIC](#️-security-warning-do-not-make-the-env-file-public)
 
 ---
 
