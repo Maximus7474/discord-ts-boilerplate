@@ -1,21 +1,13 @@
 import Config from '../config';
 
-import Logger from '../logger';
-import SQLiteHandler from './sqlite';
-const logger = new Logger('Database');
+import DBHandler from './sqlite';
 
-const initDB = (): SQLiteHandler|null => {
-    if (!Config.DATABASE_PROTOCOL) return null;
+const initDB = () => {
+    const Database = new DBHandler({
+        SQLITE_PATH: Config.SQLITE_PATH,
+    });
 
-    switch (Config.DATABASE_PROTOCOL) {
-        case 'SQLITE': {
-            logger.info('Loading SQLite Handler');
-            const Database = new SQLiteHandler(Config.SQLITE_PATH);
-            return Database as SQLiteHandler;
-        }
-        default:
-            throw new Error(`Invalid DATABASE_PROTOCOL: ${Config.DATABASE_PROTOCOL}`);
-    }
+    return Database;
 };
 
 const Database = initDB();
