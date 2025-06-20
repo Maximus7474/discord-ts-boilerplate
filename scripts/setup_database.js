@@ -7,19 +7,19 @@ const readline = require('readline');
 const databaseHandlerPath = path.join(__dirname, '..', 'src', 'utils', 'database', 'index.ts');
 const importRegex = /import DBHandler from '\.\/[A-Za-z0-9]+';/i;
 
-const DB_CONNECTORS = {
-    '1': {
+const DB_CONNECTORS = [
+    {
         name: 'SQLite (better-sqlite3)',
         packageName: 'better-sqlite3',
         importLine: "import DBHandler from './sqlite';",
     },
     // ToDo: create implementation for it
-    // '2': {
+    // {
     //     name: 'MySQL (mysql2)',
     //     packageName: 'mysql2',
     //     importLine: "import DBHandler from './mysql';",
     // },
-};
+];
 
 function detectPackageManager() {
     const userAgent = process.env.npm_config_user_agent;
