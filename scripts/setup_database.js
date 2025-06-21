@@ -62,21 +62,20 @@ function installDBPackage(packageManager, packageName) {
 }
 
 function updateImportPath(filePath, searchRegex, newImportLine, newTestCode) {
-    console.log(`\n--- Updating import path in ${filePath} ---`);
+    console.log(`\n--- Updating import path in './src/utils/database/index.ts' ---`);
     try {
         let fileContent = fs.readFileSync(filePath, 'utf8');
 
         if (!searchRegex.test(fileContent)) {
-            console.warn(`Warning: Placeholder import not found in ${filePath}. Skipping import update.`);
+            console.warn(`Warning: Placeholder import not found in file. Skipping import update.`);
         }
 
-        // Replace the specific placeholder import line
         fileContent = fileContent.replace(searchRegex, newImportLine);
 
         fs.writeFileSync(filePath, fileContent, 'utf8');
-        console.log(`Successfully updated ${filePath} with the new import.`);
+        console.log(`Successfully updated file with the new import.`);
     } catch (error) {
-        console.error(`Error updating ${filePath}:`, error.message);
+        console.error(`Error updating './src/utils/database/index.ts':`, error.message, '\ncomplete filepath: ', filePath);
         process.exit(1);
     }
 }
@@ -184,8 +183,7 @@ async function main() {
 
     console.log('\n--- Setup Complete! ---');
     console.log(`The database connector '${selectedConnector.packageName}' has been installed.`);
-    console.log(`'${databaseHandlerPath}' has been updated.`);
-    console.log('You may now want to review `src/database.js` to configure your connection details.');
+    console.log(`'./src/utils/database/index.ts' has been updated.`);
 }
 
 main();
