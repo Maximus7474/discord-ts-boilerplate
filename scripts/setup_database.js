@@ -90,7 +90,7 @@ async function chooseDBConnector(question, options) {
     return new Promise((resolve) => {
         console.log(`\n${question}`);
         for (const key in options) {
-            console.log(`  ${key}. ${options[key].name}`);
+            console.log(`  ${key}. ${options[key]?.name}`);
         }
 
         rl.question('\nEnter your choice: ', (answer) => {
@@ -105,11 +105,65 @@ async function chooseDBConnector(question, options) {
     });
 }
 
+async function checkForOtherDbConnector(packageManager) {
+    const { dependencies } = require('../package.json');
+    
+    const currentPackages = Object.keys(dependencies);
+    let isAnotherPackageInstalled = false;
+
+    for (const key in DB_CONNECTORS) {
+        const packageName = DB_CONNECTORS[key].packageName;
+
+        if (currentPackages.includes(packageName)) {
+            isAnotherPackageInstalled = packageName;
+            break;
+        }
+    }
+
+    if (!isAnotherPackageInstalled) return;
+
+    function uninstallPackage(packageManager, package) {
+        let command;
+        if (packageManager === 'npm') {
+            command = `npm uninstall ${packageName}`;
+        } else if (packageManager === 'pnpm') {
+            command = `pnpm remove ${packageName}`;
+        } else if (packageManager === 'yarn') {
+            command = `yarn remove ${packageName}`;
+        } else {
+            throw new Error(`Unsupported package manager: ${packageManager}`);
+        }
+        execSync(command, { stdio: 'inherit' });
+    }
+
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+
+    return new Promise((resolve) => {
+        rl.question(
+            `\nYou've currently got ${isAnotherPackageInstalled} installed in your dependencies.\nDo you want to uninstall it ? (Y/N) `,
+            (answer) => {
+                rl.close();
+                if (answer.toLowerCase() === 'y') {
+                    console.log(`Uninstalling ${isAnotherPackageInstalled}...`);
+                    uninstallPackage(packageManager, isAnotherPackageInstalled);
+                } else {
+                    console.log('Not uninstalling previous package');
+                }
+            }
+        );
+    });
+}
+
 async function main() {
     console.log('Starting database setup script...');
 
     const packageManager = detectPackageManager();
     console.log(`Detected package manager: ${packageManager}`);
+
+    await checkForOtherDbConnector(packageManager);
 
     const choice = await chooseDBConnector('Which database connector would you like to install?', DB_CONNECTORS);
     const selectedConnector = DB_CONNECTORS[choice];
