@@ -124,14 +124,15 @@ async function checkForOtherDbConnector(packageManager) {
     function uninstallPackage(packageManager, package) {
         let command;
         if (packageManager === 'npm') {
-            command = `npm uninstall ${packageName}`;
+            command = `npm uninstall ${package}`;
         } else if (packageManager === 'pnpm') {
-            command = `pnpm remove ${packageName}`;
+            command = `pnpm remove ${package}`;
         } else if (packageManager === 'yarn') {
-            command = `yarn remove ${packageName}`;
+            command = `yarn remove ${package}`;
         } else {
             throw new Error(`Unsupported package manager: ${packageManager}`);
         }
+
         execSync(command, { stdio: 'inherit' });
     }
 
@@ -151,6 +152,7 @@ async function checkForOtherDbConnector(packageManager) {
                 } else {
                     console.log('Not uninstalling previous package');
                 }
+                resolve();
             }
         );
     });
