@@ -1,5 +1,8 @@
 /* eslint-disable */
 const { execSync } = require('child_process');
+const { grey } = require('colors');
+const { magenta } = require('colors');
+const { red, yellow, green, blue } = require('colors');
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
@@ -36,11 +39,11 @@ function detectPackageManager() {
         }
     }
 
-    throw new Error('Could not detect package manager from npm_config_user_agent.');
+    throw new Error('❌ Could not detect package manager from npm_config_user_agent.');
 }
 
 function installDBPackage(packageManager, packageName) {
-    console.log(`\n--- Installing ${packageName} using ${packageManager} ---`);
+    console.log(`\n--- ⚙️  Installing ${packageName} using ${packageManager} ⚙️  ---\n`);
     try {
         let command;
         if (packageManager === 'npm') {
@@ -50,33 +53,34 @@ function installDBPackage(packageManager, packageName) {
         } else if (packageManager === 'yarn') {
             command = `yarn add ${packageName}`;
         } else {
-            throw new Error(`Unsupported package manager: ${packageManager}`);
+            throw new Error(`❌ Unsupported package manager: ${packageManager}`);
         }
-        console.log(command);
+
         execSync(command, { stdio: 'inherit' });
-        console.log(`Successfully installed ${packageName}.`);
+        console.log(green(`✅ Successfully installed ${packageName}.`));
     } catch (error) {
-        console.error(`Error installing ${packageName}:`, error.message);
-        process.exit(1);
+        throw new Error(`❌ Error installing ${packageName}: ${error.message}`);
     }
 }
 
-function updateImportPath(filePath, searchRegex, newImportLine, newTestCode) {
-    console.log(`\n--- Updating import path in './src/utils/database/index.ts' ---`);
+function updateImportPath(filePath, searchRegex, newImportLine) {
+    console.log(`\n--- ⚙️  Updating import path in ${blue('./src/utils/database/index.ts')} ⚙️  ---\n`);
     try {
         let fileContent = fs.readFileSync(filePath, 'utf8');
 
         if (!searchRegex.test(fileContent)) {
-            console.warn(`Warning: Placeholder import not found in file. Skipping import update.`);
+            throw new Error(`Unable to find import path to implement new database connector.`)
         }
 
         fileContent = fileContent.replace(searchRegex, newImportLine);
 
         fs.writeFileSync(filePath, fileContent, 'utf8');
-        console.log(`Successfully updated file with the new import.`);
+        console.log(green(`✅ Successfully updated file with the new import.\n`));
     } catch (error) {
-        console.error(`Error updating './src/utils/database/index.ts':`, error.message, '\ncomplete filepath: ', filePath);
-        process.exit(1);
+        throw new Error(
+            `❌ Error updating ${blue('./src/utils/database/index.ts')}: ${red(error.message)}\n`+
+            `Complete filepath: ${filePath}`
+        );
     }
 }
 
@@ -89,7 +93,7 @@ async function chooseDBConnector(question, options) {
     return new Promise((resolve) => {
         console.log(`\n${question}`);
         for (const key in options) {
-            console.log(`  ${key}. ${options[key]?.name}`);
+            console.log(`  ${grey(key)}. ${blue(options[key]?.name)}`);
         }
 
         rl.question('\nEnter your choice: ', (answer) => {
@@ -97,8 +101,7 @@ async function chooseDBConnector(question, options) {
             if (options[answer]) {
                 resolve(answer);
             } else {
-                console.error('Invalid choice. Please run the script again and select a valid option.');
-                process.exit(1);
+                throw new Error('❌ Invalid choice. Please run the script again and select a valid option.');
             }
         });
     });
@@ -130,7 +133,7 @@ async function checkForOtherDbConnector(packageManager) {
         } else if (packageManager === 'yarn') {
             command = `yarn remove ${package}`;
         } else {
-            throw new Error(`Unsupported package manager: ${packageManager}`);
+            throw new Error(`❌ Unsupported package manager: ${packageManager}`);
         }
 
         execSync(command, { stdio: 'inherit' });
@@ -143,14 +146,14 @@ async function checkForOtherDbConnector(packageManager) {
 
     return new Promise((resolve) => {
         rl.question(
-            `\nYou've currently got ${isAnotherPackageInstalled} installed in your dependencies.\nDo you want to uninstall it ? (Y/N) `,
+            `\nℹ️  You've currently got ${blue(isAnotherPackageInstalled)} installed in your dependencies.\nDo you want to uninstall it ? (Y/N) `,
             (answer) => {
                 rl.close();
                 if (answer.toLowerCase() === 'y') {
-                    console.log(`Uninstalling ${isAnotherPackageInstalled}...`);
+                    console.log(`⚙️  Uninstalling ${blue(isAnotherPackageInstalled)}...`);
                     uninstallPackage(packageManager, isAnotherPackageInstalled);
                 } else {
-                    console.log('Not uninstalling previous package');
+                    console.log('ℹ️  Not uninstalling previous package');
                 }
                 resolve();
             }
@@ -159,19 +162,18 @@ async function checkForOtherDbConnector(packageManager) {
 }
 
 async function main() {
-    console.log('Starting database setup script...');
+    console.log('--- ⚙️  Starting database setup script ⚙️ ---');
 
     const packageManager = detectPackageManager();
-    console.log(`Detected package manager: ${packageManager}`);
+    console.log(`✅ Detected package manager: ${green(packageManager)}`);
 
     await checkForOtherDbConnector(packageManager);
 
-    const choice = await chooseDBConnector('Which database connector would you like to install?', DB_CONNECTORS);
+    const choice = await chooseDBConnector('ℹ️  Which database connector would you like to install?', DB_CONNECTORS);
     const selectedConnector = DB_CONNECTORS[choice];
 
     if (!selectedConnector) {
-        console.error('No valid database connector selected. Exiting.');
-        process.exit(1);
+        throw new Error('❌ No valid database connector selected. Exiting.');
     }
 
     installDBPackage(packageManager, selectedConnector.packageName);
@@ -180,12 +182,12 @@ async function main() {
         databaseHandlerPath,
         importRegex,
         selectedConnector.importLine,
-        selectedConnector.testCode
     );
 
-    console.log('\n--- Setup Complete! ---');
-    console.log(`The database connector '${selectedConnector.packageName}' has been installed.`);
-    console.log(`'./src/utils/database/index.ts' has been updated.`);
+    console.log(`\n--- ✅ ${green('Setup Complete!')} ✅ ---`);
+    console.log(`ℹ️  The database connector '${blue(selectedConnector.packageName)}' has been installed.`);
+    console.log(`ℹ️  ${blue('./src/utils/database/index.ts')} has been updated.\n`);
 }
 
-main();
+main()
+.catch(err => console.error(red(err.message), '\n'));
