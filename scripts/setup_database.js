@@ -14,12 +14,11 @@ const DB_CONNECTORS = [
         packageName: 'better-sqlite3',
         importLine: "import DBHandler from './sqlite';",
     },
-    // ToDo: create implementation for it
-    // {
-    //     name: 'MySQL (mysql2)',
-    //     packageName: 'mysql2',
-    //     importLine: "import DBHandler from './mysql';",
-    // },
+    {
+        name: 'MySQL/MariaDB (mysql2)',
+        packageName: 'mysql2/promise',
+        importLine: "import DBHandler from './mysql2';",
+    },
 ];
 
 function detectPackageManager() {
