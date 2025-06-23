@@ -1,4 +1,5 @@
 /* eslint-disable */
+const { red, green } = require('colors');
 const fs = require('fs');
 const path = require('path');
 
@@ -27,9 +28,9 @@ module.exports = migrateSQLFiles = () => {
                     fs.mkdirSync(path.dirname(destPath), { recursive: true });
 
                     fs.copyFileSync(sourcePath, destPath);
-                    console.log(`✅ Copied: ${relativePath}`);
+                    console.log(`  - ${green('Copied')}: ${relativePath}`);
                 } catch (err) {
-                    console.error(`❌ Failed to copy ${sourcePath} → ${destPath}`, err);
+                    console.error(`  - ${red('Failed to copy')} ${entry.name}\n   `, err);
                 }
             }
         }
