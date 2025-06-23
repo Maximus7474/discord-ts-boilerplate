@@ -1,7 +1,7 @@
 import { DiscordClient, StaticMessageCallback, StaticMessageOptions, StaticMessageSetup } from "../types";
 
 import Logger from "../utils/logger";
-import { magenta } from "../utils/console_colours";
+import { magenta } from "../utils/import { magenta } from "colors";";
 import { AnySelectMenuInteraction, ButtonInteraction } from "discord.js";
 
 export default class StaticMessage {

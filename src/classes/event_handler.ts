@@ -2,8 +2,8 @@ import { ClientEvents } from "discord.js";
 import { DiscordClient, EventHandlerOptions } from "../types";
 
 import Logger from "../utils/logger";
-import { magenta } from "../utils/console_colours";
 import { EventHandlerCallback, EventHandlerSetup } from "../types";
+import { magenta } from "colors";
 
 /**
  * Represents an event handler for a Discord client.
