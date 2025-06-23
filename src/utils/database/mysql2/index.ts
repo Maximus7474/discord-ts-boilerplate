@@ -1,7 +1,7 @@
 import mysql, { Connection, RowDataPacket } from 'mysql2/promise';
 import { readFileSync } from 'fs';
 import path from 'path';
-import { DBConnectionDetails } from '../../../types';
+import { DBConnectionDetails } from '@types';
 
 export default class MySQLHandler {
     private pool: mysql.Pool;

@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3';
 import { readFileSync } from 'fs';
 import path from 'path';
-import { DBConnectionDetails } from '../../../types';
+import { DBConnectionDetails } from '@types';
 
 export default class SQLiteHandler {
     private db: Database.Database;
