@@ -1,8 +1,6 @@
 /* eslint-disable */
 const { execSync } = require('child_process');
-const { grey } = require('colors');
-const { magenta } = require('colors');
-const { red, yellow, green, blue } = require('colors');
+const { grey, red, green, blue } = require('colors');
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
