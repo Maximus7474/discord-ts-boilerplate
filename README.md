@@ -9,6 +9,7 @@
   - [🗄️ Database Setup](#️-database-management)
   - [⚙️ Configuring](#️-configuring)
   - [🚀 Deploying](#-deploying)
+  - [💿 Available Scripts](#-available-scripts)
   - [⚠️ Security Warning: DO NOT MAKE THE `.env` FILE PUBLIC](#️-security-warning-do-not-make-the-env-file-public)
 
 ---
@@ -338,6 +339,83 @@ Building the project does not deploy the slash commands to Discord's API. You mu
 
 **Important:**  
 The deploy script reads command data from the `dist/` directory. Ensure you run the build script before deploying.
+
+---
+
+## 💿 Available Scripts
+
+This project comes with several pre-defined scripts to streamline development, deployment, and management tasks. You can run them using your package manager (e.g., `npm run <script-name>`, `pnpm run <script-name>`, or `yarn <script-name>`).
+
+### Development Commands
+
+  * `pnpm run dev`
+
+      * This is your primary command for local development. It starts the bot in watch mode using `tsx`, automatically recompiling and restarting the application whenever you make changes to your source files.
+      * **Usage:**
+        ```bash
+        pnpm run dev
+        ```
+
+  * `pnpm run lint`
+
+      * Runs ESLint to check your TypeScript source code (`src/**/*.ts`) for potential errors, style inconsistencies, and adherence to defined coding standards.
+      * **Usage:**
+        ```bash
+        pnpm run lint
+        ```
+
+  * `pnpm run clear-commands`
+
+      * A utility script to unregister all previously deployed Discord application commands (global or guild).
+      * **Usage:**
+        ```bash
+        pnpm run clear-commands
+        ```
+
+### Build & Deployment Commands
+
+  * `pnpm run build`
+
+      * Compiles your TypeScript source code (`src/`) into production-ready JavaScript files (`dist/`).
+      * **Usage:**
+        ```bash
+        pnpm run build
+        ```
+
+  * `pnpm run deploy`
+
+      * Registers your Discord application commands with the Discord API. This makes your bot's slash commands visible and usable in Discord servers. This requires the project to have been already built.
+      * **Usage:**
+        ```bash
+        pnpm run deploy
+        ```
+
+  * `pnpm run dev-deploy`
+
+      * A convenient compound command that first builds your project (`pnpm run build`) and then immediately deploys your Discord application commands (`pnpm run deploy`).
+      * **Usage:**
+        ```bash
+        pnpm run dev-deploy
+        ```
+
+  * `pnpm run start`
+
+      * Runs the compiled JavaScript version of your bot from the `dist/` directory.
+      * **Usage:**
+        ```bash
+        pnpm run start
+        ```
+
+### Database Management Commands
+
+  * `pnpm run setup-db`
+      * This interactive script guides you through setting up your preferred database connector. It will detect your package manager, help you install the necessary database driver and its types, and configure the bot's internal database handler.
+      **You must run this script before using the bot for the first time or if you wish to switch database types.**
+      * **Usage:**
+        ```bash
+        pnpm run setup-db
+        ```
+      * **Note:** After running this, remember to configure the appropriate database connection details in your `.env` file as described in the [Database Management](#️-database-management) section.
 
 ---
 
