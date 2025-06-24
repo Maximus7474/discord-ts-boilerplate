@@ -1,7 +1,10 @@
 import Database from 'better-sqlite3';
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import path from 'path';
 import { DBConnectionDetails } from '@types';
+
+import Logger from '../logger';
+const logger = new Logger('SQLiteHandler');
 
 export default class SQLiteHandler {
     private db: Database.Database;
@@ -14,8 +17,17 @@ export default class SQLiteHandler {
         this.db = new Database(SQLITE_PATH);
     }
 
-    init(): void {
-        const sqlScript = readFileSync(path.join(__dirname, '..', 'sqlite-base.sql'), 'utf8');
+    init(): void {        
+        const scriptPath = path.join(__dirname, '..', 'possqlitetgres-base.sql'); // Store path in a variable
+        let sqlScript: string;
+
+        if (existsSync(scriptPath)) {
+            sqlScript = readFileSync(scriptPath, 'utf8');
+        } else {
+            logger.warn(`PostgreSQL base script not found at ${scriptPath}. Skipping database initialization.`);
+            return;
+        }
+
         const initSql = this.db.prepare(sqlScript);
         initSql.run();
     }
