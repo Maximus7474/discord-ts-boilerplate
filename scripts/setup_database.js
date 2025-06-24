@@ -19,6 +19,11 @@ const DB_CONNECTORS = [
         packageName: 'mysql2',
         handlerFilename: "mysql2.ts",
     },
+    {
+        name: 'PostGres (pg)',
+        packageName: 'pg -D @types/pg',
+        handlerFilename: "pgsql.ts",
+    },
 ];
 
 function detectPackageManager() {
