@@ -3,6 +3,9 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import { DBConnectionDetails } from '@types';
 
+import Logger from '../logger';
+const logger = new Logger('MySQLHandler');
+
 export default class MySQLHandler {
     private pool: mysql.Pool;
 
@@ -45,7 +48,7 @@ export default class MySQLHandler {
                 }
             }
         } catch (error) {
-            console.error('Error initializing MySQL database:', error);
+            logger.error('Error initializing MySQL database:', error);
             throw error;
         } finally {
             if (connection) {
@@ -69,7 +72,7 @@ export default class MySQLHandler {
             connection = await this.pool.getConnection();
             await connection.execute(query, params);
         } catch (error) {
-            console.error('Error executing MySQL run query:', error);
+            logger.error('Error executing MySQL run query:', error);
             throw error;
         } finally {
             if (connection) {
@@ -92,7 +95,7 @@ export default class MySQLHandler {
             const [rows] = await connection.execute<RowDataPacket[]>(query, params);
             return (rows && rows.length > 0) ? (rows[0] as T) : undefined;
         } catch (error) {
-            console.error('Error executing MySQL get query:', error);
+            logger.error('Error executing MySQL get query:', error);
             throw error;
         } finally {
             if (connection) {
@@ -115,7 +118,7 @@ export default class MySQLHandler {
             const [rows] = await connection.execute<RowDataPacket[]>(query, params);
             return rows as T[];
         } catch (error) {
-            console.error('Error executing MySQL all query:', error);
+            logger.error('Error executing MySQL all query:', error);
             throw error;
         } finally {
             if (connection) {
