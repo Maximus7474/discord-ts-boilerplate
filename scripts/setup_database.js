@@ -5,19 +5,19 @@ const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 
-const databaseHandlerPath = path.join(__dirname, '..', 'src', 'utils', 'database', 'index.ts');
-const importRegex = /import DBHandler from '\.\/[A-Za-z0-9]+';/i;
+const databaseHandlerPath = path.join(__dirname, '..', 'src', 'utils', 'database', 'handler.ts');
+const databaseHandlersFolder = path.join(__dirname, '..', 'database_handlers');
 
 const DB_CONNECTORS = [
     {
         name: 'SQLite (better-sqlite3)',
         packageName: 'better-sqlite3',
-        importLine: "import DBHandler from './sqlite';",
+        handlerFilename: "sqlite.ts",
     },
     {
         name: 'MySQL/MariaDB (mysql2)',
-        packageName: 'mysql2/promise',
-        importLine: "import DBHandler from './mysql2';",
+        packageName: 'mysql2',
+        handlerFilename: "mysql2.ts",
     },
 ];
 
@@ -60,23 +60,22 @@ function installDBPackage(packageManager, packageName) {
     }
 }
 
-function updateImportPath(filePath, searchRegex, newImportLine) {
-    console.log(`\n--- ⚙️  Updating import path in ${blue('./src/utils/database/index.ts')} ⚙️  ---\n`);
+function updateDatabaseHandler(DBHandlerFileName) {
+    console.log(`\n--- ⚙️  Updating database handler in ${blue('./src/utils/database/handler.ts')} ⚙️  ---\n`);
+
     try {
-        let fileContent = fs.readFileSync(filePath, 'utf8');
+        const newDBHandlerClass = path.join(databaseHandlersFolder, DBHandlerFileName);
+        const databaseHandlerClass = fs.readFileSync(newDBHandlerClass, 'utf8');
+        let fileContent = fs.readFileSync(databaseHandlerPath, 'utf8');
 
-        if (!searchRegex.test(fileContent)) {
-            throw new Error(`Unable to find import path to implement new database connector.`)
-        }
+        fileContent = databaseHandlerClass
 
-        fileContent = fileContent.replace(searchRegex, newImportLine);
-
-        fs.writeFileSync(filePath, fileContent, 'utf8');
+        fs.writeFileSync(databaseHandlerPath, fileContent, 'utf8');
         console.log(green(`✅ Successfully updated file with the new import.\n`));
     } catch (error) {
         throw new Error(
             `❌ Error updating ${blue('./src/utils/database/index.ts')}: ${red(error.message)}\n`+
-            `Complete filepath: ${filePath}`
+            `Complete filepath: ${databaseHandlerPath}`
         );
     }
 }
@@ -175,10 +174,8 @@ async function main() {
 
     installDBPackage(packageManager, selectedConnector.packageName);
 
-    updateImportPath(
-        databaseHandlerPath,
-        importRegex,
-        selectedConnector.importLine,
+    updateDatabaseHandler(
+        selectedConnector.handlerFilename,
     );
 
     console.log(`\n--- ✅ ${green('Setup Complete!')} ✅ ---`);
