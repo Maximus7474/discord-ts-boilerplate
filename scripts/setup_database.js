@@ -11,7 +11,7 @@ const databaseHandlersFolder = path.join(__dirname, '..', 'database_handlers');
 const DB_CONNECTORS = [
     {
         name: 'SQLite (better-sqlite3)',
-        packageName: 'better-sqlite3',
+        packageName: 'better-sqlite3 -D @types/better-sqlite3',
         handlerFilename: "sqlite.ts",
     },
     {
