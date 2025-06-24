@@ -289,9 +289,56 @@ The deploy script reads command data from the `dist/` directory. Ensure you run 
 
 ## 🗄️ Database Management
 
-- The bot currently supports multiple database systems but is configured to run with `sqlite` by default.
-- Contributions for integrating other database systems (e.g., MySQL, MariaDB, PostgreSQL, MongoDB) are welcome.  
-  However, the project aims to avoid adding unused dependencies.
+The bot supports multiple database systems, allowing you to choose the best fit for your project. To set up your desired database:
+
+1.  **Run the Database Setup Script:**
+   Navigate to your project's root directory in your terminal and run using your used package manager:
+
+   ```bash
+   npm run setup-db
+   pnpm run setup-db
+   yarn run setup-db
+   ```
+
+   This interactive script will guide you through:
+
+   * Detecting your package manager (npm, pnpm, or yarn).
+   * Prompting you to uninstall any previously installed database connector dependencies to avoid conflicts.
+   * Presenting a list of supported database connectors (SQLite, MySQL/MariaDB, PostgreSQL).
+   * Installing the chosen database package and its necessary TypeScript types (e.g., `better-sqlite3` and `@types/better-sqlite3`).
+   * Updating the core database handler file (`./src/utils/database/handler.ts`) to use the selected connector.
+
+2.  **Configure `.env` variables:**
+    After running the setup script, you'll need to configure your `.env` file with the connection details for your chosen database. **Only add the variables relevant to your chosen database connector.**
+
+    **Example `.env` fields:**
+
+      * **For SQLite:**
+
+        ```bash
+        SQLITE_PATH=data.db
+        ```
+
+        *(Leave other SQL-related fields commented out or empty)*
+
+      * **For MySQL/MariaDB or PostgreSQL:**
+
+        ```bash
+        SQL_HOST="localhost"
+        # Port can be undefined as it'll fallback on the default one for the system
+        SQL_PORT=3306
+        SQL_USER="root"
+        SQL_DATABASE="database_name"
+        SQL_PASSWORD="root"
+        ```
+
+        *(Leave `SQLITE_PATH` commented out or empty)*
+
+**Important Notes:**
+
+  * **Database Schema:** Ensure you have a corresponding SQL schema file for your chosen database (e.g., `sqlite-base.sql`, `mysql-base.sql`, `postgres-base.sql`) in the `database_handlers` directory. The `init()` method of your chosen handler will attempt to run this script.
+  * **Dependency Management:** The project prioritizes minimal dependencies. The `setup-db.js` script ensures that only the required database driver and its types are installed, preventing unnecessary packages from bloating your `node_modules`.
+  * **Future Contributions:** While the current system covers the main database types, contributions for additional database systems are welcome, following the existing structure.
 
 ---
 
