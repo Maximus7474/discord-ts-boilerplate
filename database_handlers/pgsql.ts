@@ -1,5 +1,5 @@
 import { Pool, Client, QueryResult } from 'pg';
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import path from 'path';
 import { DBConnectionDetails } from '@types';
 
@@ -36,7 +36,16 @@ export default class PostgresHandler {
     }
 
     async init(): Promise<void> {
-        const sqlScript = readFileSync(path.join(__dirname, '..', 'postgres-base.sql'), 'utf8');
+        const scriptPath = path.join(__dirname, '..', 'postgres-base.sql'); // Store path in a variable
+        let sqlScript: string;
+
+        if (existsSync(scriptPath)) {
+            sqlScript = readFileSync(scriptPath, 'utf8');
+        } else {
+            logger.warn(`PostgreSQL base script not found at ${scriptPath}. Skipping database initialization.`);
+            return;
+        }
+
         let client: Client | undefined;
 
         try {
