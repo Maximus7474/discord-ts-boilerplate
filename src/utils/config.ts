@@ -15,7 +15,7 @@ const fields = {
 
     // SQL setup
     SQL_HOST: process.env.SQL_HOST,
-    SQL_PORT: Number(process.env.SQL_PORT),
+    SQL_PORT: Number(process.env.SQL_PORT) || undefined,
     SQL_USER: process.env.SQL_USER,
     SQL_DATABASE: process.env.SQL_DATABASE,
     SQL_PASSWORD: process.env.SQL_PASSWORD,
