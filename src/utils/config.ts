@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 
 import Logger from './logger';
+import { DBConnectionDetails } from '../types';
 const logger = new Logger('CONFIG');
 
 dotenv.config();
@@ -8,17 +9,21 @@ dotenv.config();
 const fields = {
     DISCORD_BOT_TOKEN: process.env.DISCORD_BOT_TOKEN,
     MAIN_GUILD_ID: process.env.MAIN_GUILD_ID,
-    // Database variables
-    DATABASE_PROTOCOL: process.env.DATABASE_PROTOCOL,
+
     // SQLite setup
     SQLITE_PATH: process.env.SQLITE_PATH,
+
+    // SQL setup
+    SQL_HOST: process.env.SQL_HOST,
+    SQL_PORT: Number(process.env.SQL_PORT) || undefined,
+    SQL_USER: process.env.SQL_USER,
+    SQL_DATABASE: process.env.SQL_DATABASE,
+    SQL_PASSWORD: process.env.SQL_PASSWORD,
 };
 
-interface Config {
+interface Config extends DBConnectionDetails {
     DISCORD_BOT_TOKEN: string;
     MAIN_GUILD_ID: string|false;
-    DATABASE_PROTOCOL: string|false;
-    SQLITE_PATH: string;
 };
 
 if (!fields.DISCORD_BOT_TOKEN) {
@@ -32,8 +37,12 @@ if (!fields.MAIN_GUILD_ID) {
 const env: Config = {
     DISCORD_BOT_TOKEN: fields.DISCORD_BOT_TOKEN,
     MAIN_GUILD_ID: fields.MAIN_GUILD_ID ?? false,
-    DATABASE_PROTOCOL: fields.DATABASE_PROTOCOL ?? false,
-    SQLITE_PATH: fields.SQLITE_PATH!,
+    SQLITE_PATH: fields.SQLITE_PATH,
+    SQL_HOST: fields.SQL_HOST,
+    SQL_PORT: fields.SQL_PORT,
+    SQL_USER: fields.SQL_USER,
+    SQL_DATABASE: fields.SQL_DATABASE,
+    SQL_PASSWORD: fields.SQL_PASSWORD,
 }
 
 export default env;

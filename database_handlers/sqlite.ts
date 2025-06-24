@@ -1,20 +1,21 @@
 import Database from 'better-sqlite3';
 import { readFileSync } from 'fs';
 import path from 'path';
+import { DBConnectionDetails } from '@types';
 
 export default class SQLiteHandler {
     private db: Database.Database;
 
-    constructor(dbPath: string) {
-        if (typeof dbPath !== 'string') {
+    constructor({SQLITE_PATH}: DBConnectionDetails) {
+        if (typeof SQLITE_PATH !== 'string') {
             throw new Error(`DB Path for SQLite database is invalid !`);
         }
 
-        this.db = new Database(dbPath);
+        this.db = new Database(SQLITE_PATH);
     }
 
     init(): void {
-        const sqlScript = readFileSync(path.join(__dirname, 'base.sql'), 'utf8');
+        const sqlScript = readFileSync(path.join(__dirname, '..', 'sqlite-base.sql'), 'utf8');
         const initSql = this.db.prepare(sqlScript);
         initSql.run();
     }
