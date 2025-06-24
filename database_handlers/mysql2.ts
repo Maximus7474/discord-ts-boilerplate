@@ -49,7 +49,7 @@ export default class MySQLHandler {
             throw error;
         } finally {
             if (connection) {
-                connection.release();
+                connection.end();
             }
         }
     }
@@ -73,7 +73,7 @@ export default class MySQLHandler {
             throw error;
         } finally {
             if (connection) {
-                connection.release();
+                connection.end();
             }
         }
     }
@@ -96,7 +96,7 @@ export default class MySQLHandler {
             throw error;
         } finally {
             if (connection) {
-                connection.release();
+                connection.end();
             }
         }
     }
@@ -119,7 +119,7 @@ export default class MySQLHandler {
             throw error;
         } finally {
             if (connection) {
-                connection.release();
+                connection.end();
             }
         }
     }
