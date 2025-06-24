@@ -1,5 +1,5 @@
 import mysql, { Connection, RowDataPacket } from 'mysql2/promise';
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import path from 'path';
 import { DBConnectionDetails } from '@types';
 
@@ -32,7 +32,16 @@ export default class MySQLHandler {
     }
 
     async init(): Promise<void> {
-        const sqlScript = readFileSync(path.join(__dirname, '..', 'mysql-base.sql'), 'utf8');
+        const scriptPath = path.join(__dirname, '..', 'mysql-base.sql');
+        let sqlScript: string;
+
+        if (existsSync(scriptPath)) {
+            sqlScript = readFileSync(scriptPath, 'utf8');
+        } else {
+            logger.warn(`MySQL/Mariadb base script not found at ${scriptPath}. Skipping database initialization.`);
+            return;
+        }
+
         let connection: Connection | undefined;
         
         try {
