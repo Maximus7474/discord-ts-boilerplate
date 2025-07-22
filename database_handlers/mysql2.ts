@@ -32,7 +32,7 @@ export default class MySQLHandler {
     }
 
     async init(): Promise<void> {
-        const scriptPath = path.join(__dirname, '..', 'mysql-base.sql');
+        const scriptPath = path.join(__dirname, 'mysql-base.sql');
         let sqlScript: string;
 
         if (existsSync(scriptPath)) {

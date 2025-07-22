@@ -18,7 +18,7 @@ export default class SQLiteHandler {
     }
 
     init(): void {        
-        const scriptPath = path.join(__dirname, '..', 'sqlite-base.sql'); // Store path in a variable
+        const scriptPath = path.join(__dirname, 'sqlite-base.sql'); // Store path in a variable
         let sqlScript: string;
 
         if (existsSync(scriptPath)) {

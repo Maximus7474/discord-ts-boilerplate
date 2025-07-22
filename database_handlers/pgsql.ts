@@ -36,7 +36,7 @@ export default class PostgresHandler {
     }
 
     async init(): Promise<void> {
-        const scriptPath = path.join(__dirname, '..', 'postgres-base.sql'); // Store path in a variable
+        const scriptPath = path.join(__dirname, 'postgres-base.sql'); // Store path in a variable
         let sqlScript: string;
 
         if (existsSync(scriptPath)) {
