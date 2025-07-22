@@ -28,8 +28,7 @@ export default class SQLiteHandler {
             return;
         }
 
-        const initSql = this.db.prepare(sqlScript);
-        initSql.run();
+        this.db.exec(sqlScript);
     }
 
     /**
