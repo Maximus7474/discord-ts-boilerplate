@@ -18,13 +18,13 @@ export default class SQLiteHandler {
     }
 
     init(): void {        
-        const scriptPath = path.join(__dirname, '..', 'possqlitetgres-base.sql'); // Store path in a variable
+        const scriptPath = path.join(__dirname, '..', 'sqlite-base.sql'); // Store path in a variable
         let sqlScript: string;
 
         if (existsSync(scriptPath)) {
             sqlScript = readFileSync(scriptPath, 'utf8');
         } else {
-            logger.warn(`PostgreSQL base script not found at ${scriptPath}. Skipping database initialization.`);
+            logger.warn(`SQLite base script not found at ${scriptPath}. Skipping database initialization.`);
             return;
         }
 
