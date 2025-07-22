@@ -9,7 +9,7 @@ import LoadCommands from './utils/initialisation/load_commands';
 import LoadEvents from './utils/initialisation/load_events';
 import LoadStaticMessages from './utils/initialisation/load_static_messages';
 
-if (Database) Database.init();
+Database.init();
 
 const client: DiscordClient = new Client({
     intents: [
