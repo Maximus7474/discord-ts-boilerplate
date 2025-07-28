@@ -81,7 +81,7 @@ export default class MySQLHandler {
      *
      * @throws {Error} If the query execution fails.
      */
-    async run(query: string, params: unknown[] = []): Promise<void> {
+    async execute(query: string, params: unknown[] = []): Promise<void> {
         let connection: Connection | undefined;
         try {
             connection = await this.pool.getConnection();

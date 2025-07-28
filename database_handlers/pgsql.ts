@@ -86,7 +86,7 @@ export default class PostgresHandler {
      *
      * @throws {Error} If the query execution fails.
      */
-    async run(query: string, params: unknown[] = []): Promise<void> {
+    async execute(query: string, params: unknown[] = []): Promise<void> {
         let client: Client | undefined;
         try {
             client = await this.pool.connect();
