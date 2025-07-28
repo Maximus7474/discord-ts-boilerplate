@@ -57,7 +57,7 @@ export default class SQLiteHandler {
      * @throws {Error} If the query execution fails.
      * @returns {Promise<void>}
      */
-    run(query: string, params: unknown[] = []): Promise<void> {
+    async run(query: string, params: unknown[] = []): Promise<void> {
         try {
             const stmt = this.db.prepare(query);
             stmt.run(...params);
