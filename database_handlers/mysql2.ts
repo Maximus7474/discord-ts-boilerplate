@@ -141,4 +141,6 @@ export default class MySQLHandler {
             }
         }
     }
+
+    async close() {}
 }
