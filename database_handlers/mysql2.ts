@@ -30,6 +30,12 @@ export default class MySQLHandler {
             queueLimit: 0
         });
     }
+    
+    /**
+     * Sets up the database by running the base.sql file to 
+     * run all queries listed in it
+     * @returns {Promise<void>}
+     */
 
     async initializeDB(): Promise<void> {
         const scriptPath = path.join(__dirname, 'base.sql');
