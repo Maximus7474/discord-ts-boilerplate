@@ -81,6 +81,7 @@ The bot supports multiple database systems, allowing you to choose the best fit 
   * **Database Schema:** Ensure you have a corresponding SQL schema file for your chosen database (e.g., `sqlite-base.sql`, `mysql-base.sql`, `postgres-base.sql`) in the `database_handlers` directory. The `init()` method of your chosen handler will attempt to run this script.
   * **Dependency Management:** The project prioritizes minimal dependencies. The `setup-db.js` script ensures that only the required database driver and its types are installed, preventing unnecessary packages from bloating your `node_modules`.
   * **Future Contributions:** While the current system covers the main database types, contributions for additional database systems are welcome, following the existing structure.
+  * **Initializing:** When starting the script for the first time you'll need to add the `--build-db` flag, this will take the contents of the `base.sql` file and run all queries located within. This is set as a manual step because it is not necessary to be run at every startup of the bot.
 
 ---
 

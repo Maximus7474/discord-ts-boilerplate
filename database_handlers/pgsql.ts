@@ -35,8 +35,13 @@ export default class PostgresHandler {
         // });
     }
 
-    async init(): Promise<void> {
-        const scriptPath = path.join(__dirname, 'postgres-base.sql'); // Store path in a variable
+    /**
+     * Sets up the database by running the base.sql file to 
+     * run all queries listed in it
+     * @returns {Promise<void>}
+     */
+    async initializeDB(): Promise<void> {
+        const scriptPath = path.join(__dirname, 'base.sql'); // Store path in a variable
         let sqlScript: string;
 
         if (existsSync(scriptPath)) {
@@ -81,7 +86,7 @@ export default class PostgresHandler {
      *
      * @throws {Error} If the query execution fails.
      */
-    async run(query: string, params: unknown[] = []): Promise<void> {
+    async execute<T>(query: string, params: unknown[] = []): Promise<QueryResult<T>> {
         let client: Client | undefined;
         try {
             client = await this.pool.connect();
@@ -98,10 +103,59 @@ export default class PostgresHandler {
     }
 
     /**
+     * Performs an INSERT operation and returns the ID of the newly inserted row.
+     * The `query` MUST include a `RETURNING id` (or `RETURNING primary_key_column_name`) clause
+     * to retrieve the generated ID.
+     *
+     * @param {string} query - The SQL INSERT query string, e.g., "INSERT INTO users (name) VALUES ($1) RETURNING id".
+     * @param {unknown[]} params - An array of parameters to bind to the query.
+     * @returns {Promise<number>} A Promise that resolves with the ID of the last inserted row,
+     * or the number of changed rows.
+     * 
+     * @throws {Error} If the insert query execution fails.
+     */
+    async insert(query: string, params: unknown[]): Promise<number> {
+        try {
+            const result = await this.execute<{ id: number }>(query, params);
+
+            if (result.rows && result.rows.length > 0 && result.rows[0].id !== undefined) {
+                return result.rows[0].id;
+            } else {
+                logger.warn(`Insert query "${query}" did not return an ID.`);
+                return result.rows.length;
+            }
+        } catch (err) {
+            logger.error(`Error inserting data with query "${query}":`, err);
+            throw err;
+        }
+    }
+
+    /**
+     * Executes an UPDATE SQL query and returns the number of rows affected.
+     *
+     * @param {string} query - The SQL UPDATE query string.
+     * @param {unknown[]} params - An array of parameters to bind to the query.
+     * @returns {Promise<number>} A Promise that resolves with the number of rows affected by the update.
+     * @throws {Error} If the update query execution fails.
+     */
+    async update(query: string, params: unknown[]): Promise<number> {
+        try {
+            const result = await this.execute(query, params);
+
+            return result.rowCount;
+        } catch (err) {
+            logger.error(`Error updating data with query "${query}":`, err);
+            throw err;
+        }
+    }
+
+    /**
      * Executes a SQL query to retrieve a single row from the database.
      *
      * @param query - The SQL query string to be executed.
      * @param params - An optional array of parameters to bind to the query.
+     *
+     * @throws {Error} If the query execution fails.
      * @returns The first row of the result set as an object, or `undefined` if no rows are found.
      */
     async get<T = unknown>(query: string, params: unknown[] = []): Promise<T | undefined> {
@@ -126,6 +180,8 @@ export default class PostgresHandler {
      *
      * @param query - The SQL query string to execute.
      * @param params - An optional array of parameters to bind to the query. Defaults to an empty array.
+     *
+     * @throws {Error} If the query execution fails.
      * @returns An array of objects representing the rows returned by the query.
      */
     async all<T = unknown>(query: string, params: unknown[] = []): Promise<T[]> {
@@ -144,7 +200,7 @@ export default class PostgresHandler {
         }
     }
 
-    async end(): Promise<void> {
+    async close(): Promise<void> {
         await this.pool.end();
         logger.info('PostgreSQL connection pool closed.');
     }
