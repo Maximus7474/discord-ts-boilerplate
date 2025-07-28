@@ -71,16 +71,17 @@ export default class SQLiteHandler {
     /**
      * Executes a SQL query to retrieve a single row from the database.
      *
+     * @template T The expected type of the returned data by the query.
      * @param query - The SQL query string to be executed.
      * @param params - An optional array of parameters to bind to the query.
      * 
      * @throws {Error} If the query execution fails.
      * @returns The first row of the result set as an object, or `undefined` if no rows are found.
      */
-    async get(query: string, params: unknown[] = []): Promise<unknown | undefined> {
+    async get<T>(query: string, params: unknown[] = []): Promise<T | undefined> {
         try {
             const stmt = this.db.prepare(query);
-            return Promise.resolve(stmt.get(...params));
+            return Promise.resolve(stmt.get(...params) as T | undefined);
         } catch (error) {
             logger.error(`Error getting data with query "${query}": ${error}`);
             return Promise.reject(error);
@@ -90,16 +91,17 @@ export default class SQLiteHandler {
     /**
      * Executes a SQL query and retrieves all matching rows from the database.
      *
+     * @template T The expected type of the returned data by the query.
      * @param query - The SQL query string to execute.
      * @param params - An optional array of parameters to bind to the query. Defaults to an empty array.
      * 
      * @throws {Error} If the query execution fails.
      * @returns An array of objects representing the rows returned by the query.
      */
-    async all(query: string, params: unknown[] = []): Promise<unknown[]> {
+    async all<T>(query: string, params: unknown[] = []): Promise<T[]> {
         try {
             const stmt = this.db.prepare(query);
-            return Promise.resolve(stmt.all(...params));
+            return Promise.resolve(stmt.all(...params) as T[]);
         } catch (error) {
             logger.error(`Error getting all data with query "${query}": ${error}`);
             return Promise.reject(error);
