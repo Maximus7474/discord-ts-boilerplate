@@ -69,6 +69,54 @@ export default class SQLiteHandler {
     }
 
     /**
+     * Performs an INSERT operation and returns the ID of the newly inserted row.
+     * This relies on SQLite's `last_insert_rowid()` or `AUTOINCREMENT` behavior.
+     *
+     * @param {string} query - The SQL INSERT query string.
+     * @param {unknown[]} params - An array of parameters to bind to the query.
+     *
+     * @returns {Promise<number | null>} A Promise that resolves with the ID of the last inserted row,
+     * or the number of affected rows.
+     * @throws {Error} If the insert query execution fails.
+     */
+    async insert(query: string, params: unknown[]): Promise<number | null> {
+        try {
+            const stmt = this.db.prepare(query);
+            const result = stmt.run(...params);
+
+            if (result.lastInsertRowid !== undefined && result.lastInsertRowid !== null) {
+                return Promise.resolve(Number(result.lastInsertRowid));
+            } else {
+                logger.warn(`Insert query "${query}" did not return a last inserted ID.`);
+                return Promise.resolve(result.changes);
+            }
+        } catch (err) {
+            logger.error(`Error inserting data with query "${query}":`, err);
+            return Promise.reject(err);
+        }
+    }
+
+    /**
+     * Executes an UPDATE SQL query and returns the number of rows affected.
+     *
+     * @param {string} query - The SQL UPDATE query string.
+     * @param {unknown[]} params - An array of parameters to bind to the query.
+     * @returns {Promise<number>} A Promise that resolves with the number of rows affected by the update.
+     * @throws {Error} If the update query execution fails.
+     */
+    async update(query: string, params: unknown[]): Promise<number> {
+        try {
+            const stmt = this.db.prepare(query);
+            const result = stmt.run(...params);
+
+            return Promise.resolve(result.changes);
+        } catch (err) {
+            logger.error(`Error updating data with query "${query}":`, err);
+            return Promise.reject(err);
+        }
+    }
+
+    /**
      * Executes a SQL query to retrieve a single row from the database.
      *
      * @template T The expected type of the returned data by the query.
