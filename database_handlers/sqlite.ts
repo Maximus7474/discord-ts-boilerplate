@@ -73,6 +73,8 @@ export default class SQLiteHandler {
      *
      * @param query - The SQL query string to be executed.
      * @param params - An optional array of parameters to bind to the query.
+     * 
+     * @throws {Error} If the query execution fails.
      * @returns The first row of the result set as an object, or `undefined` if no rows are found.
      */
     async get(query: string, params: unknown[] = []): Promise<unknown | undefined> {
@@ -90,6 +92,8 @@ export default class SQLiteHandler {
      *
      * @param query - The SQL query string to execute.
      * @param params - An optional array of parameters to bind to the query. Defaults to an empty array.
+     * 
+     * @throws {Error} If the query execution fails.
      * @returns An array of objects representing the rows returned by the query.
      */
     async all(query: string, params: unknown[] = []): Promise<unknown[]> {
@@ -104,6 +108,8 @@ export default class SQLiteHandler {
 
     /**
      * Closes the connection to the database
+     * 
+     * @throws {Error} If the query execution fails.
      * @returns 
      */
     async close(): Promise<void> {
