@@ -8,7 +8,7 @@ export default class SQLiteHandler {
         console.error(red('[ERROR] Use the setup-db script to install one.'));
     }
 
-    init(): void {}
+    initializeDB(): void {}
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     run(query: string, params: unknown[] = []): void {
