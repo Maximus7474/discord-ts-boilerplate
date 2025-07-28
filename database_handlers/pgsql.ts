@@ -107,6 +107,8 @@ export default class PostgresHandler {
      *
      * @param query - The SQL query string to be executed.
      * @param params - An optional array of parameters to bind to the query.
+     *
+     * @throws {Error} If the query execution fails.
      * @returns The first row of the result set as an object, or `undefined` if no rows are found.
      */
     async get<T = unknown>(query: string, params: unknown[] = []): Promise<T | undefined> {
@@ -131,6 +133,8 @@ export default class PostgresHandler {
      *
      * @param query - The SQL query string to execute.
      * @param params - An optional array of parameters to bind to the query. Defaults to an empty array.
+     *
+     * @throws {Error} If the query execution fails.
      * @returns An array of objects representing the rows returned by the query.
      */
     async all<T = unknown>(query: string, params: unknown[] = []): Promise<T[]> {
