@@ -31,8 +31,8 @@ export default class MySQLHandler {
         });
     }
 
-    async init(): Promise<void> {
-        const scriptPath = path.join(__dirname, 'mysql-base.sql');
+    async initializeDB(): Promise<void> {
+        const scriptPath = path.join(__dirname, 'base.sql');
         let sqlScript: string;
 
         if (existsSync(scriptPath)) {
