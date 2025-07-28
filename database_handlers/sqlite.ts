@@ -17,6 +17,11 @@ export default class SQLiteHandler {
         this.db = new Database(SQLITE_PATH);
     }
 
+    /**
+     * Sets up the database by running the base.sql file to 
+     * run all queries listed in it
+     * @returns {void}
+     */
     initializeDB(): void {        
         const scriptPath = path.join(__dirname, 'base.sql');
         let sqlScript: string;
