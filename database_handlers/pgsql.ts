@@ -149,7 +149,7 @@ export default class PostgresHandler {
         }
     }
 
-    async end(): Promise<void> {
+    async close(): Promise<void> {
         await this.pool.end();
         logger.info('PostgreSQL connection pool closed.');
     }
