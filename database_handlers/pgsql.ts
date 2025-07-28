@@ -35,6 +35,11 @@ export default class PostgresHandler {
         // });
     }
 
+    /**
+     * Sets up the database by running the base.sql file to 
+     * run all queries listed in it
+     * @returns {Promise<void>}
+     */
     async initializeDB(): Promise<void> {
         const scriptPath = path.join(__dirname, 'base.sql'); // Store path in a variable
         let sqlScript: string;
