@@ -13,4 +13,9 @@ const connectionDetails: DBConnectionDetails = {
 
 const Database = new DBHandler(connectionDetails);
 
+const { argv } = process;
+if (argv.includes('--build-db')) {
+    Database.initializeDB();
+}
+
 export default Database;
