@@ -6,6 +6,11 @@ import { DBConnectionDetails } from '@types';
 import Logger from '../logger';
 const logger = new Logger('SQLiteHandler');
 
+/*
+    Better SQLITE 3 is a syncronous module, to follow the same structure for
+    the database handler class we're using Promises to "fake" the asyncronous
+    behaviour to allow for better switching capability of handlers.
+*/
 export default class SQLiteHandler {
     private db: Database.Database;
 
@@ -20,9 +25,9 @@ export default class SQLiteHandler {
     /**
      * Sets up the database by running the base.sql file to 
      * run all queries listed in it
-     * @returns {void}
+     * @returns {Promise<void>}
      */
-    initializeDB(): void {        
+    async initializeDB(): Promise<void> {
         const scriptPath = path.join(__dirname, 'base.sql');
         let sqlScript: string;
 
@@ -30,10 +35,16 @@ export default class SQLiteHandler {
             sqlScript = readFileSync(scriptPath, 'utf8');
         } else {
             logger.warn(`SQLite base script not found at ${scriptPath}. Skipping database initialization.`);
-            return;
+            return Promise.reject(new Error(`SQLite base script not found at ${scriptPath}`));
         }
 
-        this.db.exec(sqlScript);
+        try {
+            this.db.exec(sqlScript);
+            return Promise.resolve();
+        } catch (error) {
+            logger.error(`Error initializing database: ${error}`);
+            return Promise.reject(error);
+        }
     }
 
     /**
@@ -44,10 +55,17 @@ export default class SQLiteHandler {
      *                 Defaults to an empty array if not provided.
      * 
      * @throws {Error} If the query execution fails.
+     * @returns {Promise<void>}
      */
-    run(query: string, params: unknown[] = []): void {
-        const stmt = this.db.prepare(query);
-        stmt.run(...params);
+    run(query: string, params: unknown[] = []): Promise<void> {
+        try {
+            const stmt = this.db.prepare(query);
+            stmt.run(...params);
+            return Promise.resolve();
+        } catch (error) {
+            logger.error(`Error running query "${query}": ${error}`);
+            return Promise.reject(error);
+        }
     }
 
     /**
@@ -57,9 +75,14 @@ export default class SQLiteHandler {
      * @param params - An optional array of parameters to bind to the query.
      * @returns The first row of the result set as an object, or `undefined` if no rows are found.
      */
-    get(query: string, params: unknown[] = []): unknown {
-        const stmt = this.db.prepare(query);
-        return stmt.get(...params);
+    async get(query: string, params: unknown[] = []): Promise<unknown | undefined> {
+        try {
+            const stmt = this.db.prepare(query);
+            return Promise.resolve(stmt.get(...params));
+        } catch (error) {
+            logger.error(`Error getting data with query "${query}": ${error}`);
+            return Promise.reject(error);
+        }
     }
 
     /**
@@ -69,12 +92,27 @@ export default class SQLiteHandler {
      * @param params - An optional array of parameters to bind to the query. Defaults to an empty array.
      * @returns An array of objects representing the rows returned by the query.
      */
-    all(query: string, params: unknown[] = []): unknown[] {
-        const stmt = this.db.prepare(query);
-        return stmt.all(...params);
+    async all(query: string, params: unknown[] = []): Promise<unknown[]> {
+        try {
+            const stmt = this.db.prepare(query);
+            return Promise.resolve(stmt.all(...params));
+        } catch (error) {
+            logger.error(`Error getting all data with query "${query}": ${error}`);
+            return Promise.reject(error);
+        }
     }
 
-    close(): void {
-        this.db.close();
+    /**
+     * Closes the connection to the database
+     * @returns 
+     */
+    async close(): Promise<void> {
+        try {
+            this.db.close();
+            return Promise.resolve();
+        } catch (error) {
+            logger.error(`Error closing database: ${error}`);
+            return Promise.reject(error);
+        }
     }
 }
