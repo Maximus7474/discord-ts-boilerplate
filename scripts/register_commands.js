@@ -1,9 +1,9 @@
 /* eslint-disable */
-const { REST, Routes } = require('discord.js');
-const path = require('path');
-const fs = require('fs');
+import { REST, Routes } from 'discord.js';
+import path from 'path';
+import fs from 'fs';
+import 'dotenv/config';
 
-require('dotenv').config();
 if (!process.env.DISCORD_BOT_TOKEN) {
     console.error('❌ Missing DISCORD_BOT_TOKEN in .env file.');
     process.exit(1);
@@ -31,7 +31,7 @@ const commands = {
 if (clearCommands) {
     console.log('🗑️  Clearing all commands...');
 } else {
-    const commandsPath = path.join(__dirname, '../dist/commands');
+    const commandsPath = path.join(import.meta.url, '../dist/commands');
 
     if (!fs.existsSync(commandsPath)) {
         console.error('❌ Commands directory not found. Please build the project first.');

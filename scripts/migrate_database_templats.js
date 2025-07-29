@@ -1,9 +1,15 @@
 /* eslint-disable */
-const { red, green } = require('colors');
-const fs = require('fs');
-const path = require('path');
 
-module.exports = migrateSQLFiles = () => {
+import pkg from 'colors';
+const { red, green } = pkg;
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export default () => {
     const sourceRoot = path.resolve(__dirname, '../src/utils/database');
     const destRoot = path.resolve(__dirname, '../dist/utils/database');
 
