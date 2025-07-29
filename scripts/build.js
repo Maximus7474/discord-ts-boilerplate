@@ -81,13 +81,13 @@ exec("tsc", async (error, stdout, stderr) => {
         if (stdout) console.log(stdout);
 
         console.log(blue("ℹ️  Adding .js extensions to compiled ES Modules..."));
-        // try {
+        try {
             await addJsExtensions(distPath);
             console.log(green("✅ .js extensions added to imports/exports."));
-        // } catch (extError) {
-        //     console.error(red(`❌ Failed to add .js extensions: ${extError}`));
-        //     process.exit(1);
-        // }
+        } catch (extError) {
+            console.error(red(`❌ Failed to add .js extensions: ${extError}`));
+            process.exit(1);
+        }
 
         migrateSQLFiles();
         console.log(green("\n✅ SQL files migrated to dist folder."));
