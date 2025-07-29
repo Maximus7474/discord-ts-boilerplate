@@ -2,7 +2,7 @@ import { AutocompleteInteraction, ChatInputCommandInteraction } from "discord.js
 import { DiscordClient, SlashCommandBuilders, SlashCommandOptions } from "../types";
 
 import Logger from "../utils/logger";
-import { magenta } from "colors";
+import { magenta } from "../utils/colours";
 
 /**
  * Represents a Slash Command for a Discord bot.
