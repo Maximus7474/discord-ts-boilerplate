@@ -28,7 +28,7 @@ export default class SQLiteHandler {
      * @returns {Promise<void>}
      */
     async initializeDB(): Promise<void> {
-        const scriptPath = path.join(__dirname, 'base.sql');
+        const scriptPath = path.join(import.meta.dirname, 'base.sql');
         let sqlScript: string;
 
         if (existsSync(scriptPath)) {
