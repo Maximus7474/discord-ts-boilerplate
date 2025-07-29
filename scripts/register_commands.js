@@ -1,8 +1,11 @@
 /* eslint-disable */
 import { REST, Routes } from 'discord.js';
 import path from 'path';
-import fs from 'fs';
 import 'dotenv/config';
+import { fileURLToPath, pathToFileURL } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 if (!process.env.DISCORD_BOT_TOKEN) {
     console.error('❌ Missing DISCORD_BOT_TOKEN in .env file.');
@@ -31,25 +34,41 @@ const commands = {
 if (clearCommands) {
     console.log('🗑️  Clearing all commands...');
 } else {
-    const commandsPath = path.join(import.meta.url, '../dist/commands');
+    const absoluteCommandsPath = path.join(__dirname, '../dist/commands/index.js');
 
-    if (!fs.existsSync(commandsPath)) {
-        console.error('❌ Commands directory not found. Please build the project first.');
+    const commandsUrl = pathToFileURL(absoluteCommandsPath).href;
+
+    try {
+        const commandsModule = await import(commandsUrl);
+        const commandList = commandsModule.default;
+
+        if (!Array.isArray(commandList)) {
+            console.error('❌ Expected an array of commands from dist/commands/index.js, but received something else.');
+            process.exit(1);
+        }
+
+        for (const command of commandList) {
+            if (typeof command.register === 'function') {
+                const commandData = command.register();
+                console.log(`📜 Registering command: ${commandData.name}`);
+
+                const isGuildSpecific = typeof command.isGuildSpecific === 'function' && command.isGuildSpecific();
+                commands[isGuildSpecific ? 'guild' : 'public'].push(commandData);
+            } else {
+                console.warn(`⚠️  Skipping invalid command module: It does not have a 'register' function.`);
+            }
+        }
+
+        console.log(`📜 Found ${commands.public.length} public commands and ${commands.guild.length} guild-specific commands.`);
+
+    } catch (error) {
+        if (error.code === 'ERR_MODULE_NOT_FOUND') {
+            console.error(`❌ Could not find command index file at ${absoluteCommandsPath}. Please ensure the project is built.`);
+        } else {
+            console.error(`❌ Error loading commands from dist/commands/index.js:`, error);
+        }
         process.exit(1);
     }
-
-    const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-
-    for (const file of commandFiles) {
-        const command = require(path.join(commandsPath, file)).default;
-        if (typeof command.register === 'function') {
-            const commandData = command.register();
-            console.log(`📜 Registering command: ${commandData.name}`);
-            commands[command.isGuildSpecific() ? 'guild' : 'public'].push(commandData);
-        }
-    }
-
-    console.log(`📜 Found ${commands.public.length} public commands and ${commands.guild.length} guild-specific commands.`);
 }
 
 const rest = new REST({ version: '10' }).setToken(TOKEN);
