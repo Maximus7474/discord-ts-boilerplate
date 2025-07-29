@@ -3,7 +3,7 @@ import { DiscordClient, EventHandlerOptions } from "../types";
 
 import Logger from "../utils/logger";
 import { EventHandlerCallback, EventHandlerSetup } from "../types";
-import { magenta } from "colors";
+import { magenta } from "../utils/colours";
 
 /**
  * Represents an event handler for a Discord client.

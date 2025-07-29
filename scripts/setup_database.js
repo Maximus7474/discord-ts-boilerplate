@@ -1,12 +1,13 @@
 /* eslint-disable */
-const { execSync } = require('child_process');
-const { grey, red, green, blue } = require('colors');
-const fs = require('fs');
-const path = require('path');
-const readline = require('readline');
+import { execSync } from 'child_process';
+import pkg from 'colors';
+const { grey, red, green, blue } = pkg;
+import fs from 'fs';
+import path from 'path';
+import readline from 'readline';
 
-const databaseHandlerPath = path.join(__dirname, '..', 'src', 'utils', 'database', 'handler.ts');
-const databaseHandlersFolder = path.join(__dirname, '..', 'database_handlers');
+const databaseHandlerPath = path.join(import.meta.url, '..', 'src', 'utils', 'database', 'handler.ts');
+const databaseHandlersFolder = path.join(import.meta.url, '..', 'database_handlers');
 
 const DB_CONNECTORS = [
     {
@@ -125,14 +126,14 @@ async function checkForOtherDbConnector(packageManager) {
 
     if (!isAnotherPackageInstalled) return;
 
-    function uninstallPackage(packageManager, package) {
+    function uninstallPackage(packageManager, pckg) {
         let command;
         if (packageManager === 'npm') {
-            command = `npm uninstall ${package}`;
+            command = `npm uninstall ${pckg}`;
         } else if (packageManager === 'pnpm') {
-            command = `pnpm remove ${package}`;
+            command = `pnpm remove ${pckg}`;
         } else if (packageManager === 'yarn') {
-            command = `yarn remove ${package}`;
+            command = `yarn remove ${pckg}`;
         } else {
             throw new Error(`❌ Unsupported package manager: ${packageManager}`);
         }

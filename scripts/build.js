@@ -1,12 +1,12 @@
 /* eslint-disable */
-const { exec } = require("child_process");
-const fs = require("fs");
-const path = require("path");
-const { red, green, blue } = require('colors');
+import { exec } from "child_process";
+import fs from "fs";
+import path from "path";
+import pkg from 'colors';
+const { red, green, blue } = pkg;
+import migrateSQLFiles from "./migrate_database_templats.js";
 
-const migrateSQLFiles = require("./migrate_database_templats.js");
-
-const distPath = path.join(__dirname, "../dist");
+const distPath = path.join(import.meta.url, "../dist");
 
 if (fs.existsSync(distPath)) {
     fs.rmSync(distPath, { recursive: true, force: true });

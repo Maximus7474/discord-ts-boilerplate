@@ -1,45 +1,28 @@
-import * as path from 'path';
 import { DiscordClient } from '../../types';
-import { getFilesFromDir } from '../utils';
+import { AnySelectMenuInteraction, ButtonInteraction } from 'discord.js';
+import static_messages from '../../static_messages';
 
 import Logger from '../logger';
-import StaticMessage from '../../classes/static_messages';
-import { AnySelectMenuInteraction, ButtonInteraction } from 'discord.js';
-import { pathToFileURL } from 'url';
 const logger = new Logger('LoadStaticMessages');
 
 export default (client: DiscordClient) => {
     const initialiseStaticMessage = async (client: DiscordClient) => {
         const callbackHandler = new Map<string, (client: DiscordClient, interaction: ButtonInteraction|AnySelectMenuInteraction) => Promise<void>>();
     
-        const staticMessageDir = path.join(__dirname, '../../static_messages');
-        const messages = getFilesFromDir(staticMessageDir);
-    
-        messages.forEach(async (file) => {
-            const filePath = path.join(file);
-            const fileUrl = pathToFileURL(filePath).href;
-
+        static_messages.forEach(async (message) => {
             try {
-                const staticMessageModule = await import(fileUrl);
-    
-                if (staticMessageModule && staticMessageModule.default) {
-                    const { default: message } = staticMessageModule as { default: StaticMessage };
-    
-                    message.initialize(client)
-                    .catch((err) => {
-                        logger.error('Unable to initialize', path.basename(filePath), 'error:', err.message);
-                    });
-    
-                    message.customIds.forEach((customId) => {
-                        callbackHandler.set(customId, message.handleInteraction.bind(message));
-                    });
+                message.initialize(client)
+                .catch((err) => {
+                    logger.error('Unable to initialize', message.name, 'error:', err.message);
+                });
 
-                    logger.success(`Loaded static message: ${message.name}`)
-                } else {
-                    logger.warn(`Unable to static message: ${filePath.slice(staticMessageDir.length + 1)}`)
-                }
+                message.customIds.forEach((customId) => {
+                    callbackHandler.set(customId, message.handleInteraction.bind(message));
+                });
+
+                logger.success(`Loaded static message: ${message.name}`)
             } catch (error) {
-                console.error(`Failed to load static message: ${file}\n`, error);
+                console.error(`Failed to load static message: ${message.name}\n`, error);
             }
         });
     
