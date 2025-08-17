@@ -10,10 +10,10 @@ export default (client: DiscordClient) => {
         try {
             const commandName = command.register().name;
 
-            client.commands.set(commandName, command.execute.bind(command));
+            client.commands.set(commandName, command);
 
             if (command.hasAutocomplete()) {
-                client.autocompleteCommands.set(commandName, command.executeAutocomplete.bind(command));
+                client.autocompleteCommands.set(commandName, command);
             }
 
             logger.success(`Loaded /${commandName}`);

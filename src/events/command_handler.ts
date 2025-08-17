@@ -9,18 +9,18 @@ export default new EventHandler({
     type: "on",
     callback: (logger: Logger, client: DiscordClient, interaction: ChatInputCommandInteraction | AutocompleteInteraction) => {
         if (interaction.isChatInputCommand()) {
-            const commandCallback = client.commands.get(interaction.commandName);
-            if (!commandCallback) return;
+            const command = client.commands.get(interaction.commandName);
+            if (!command) return;
 
-            commandCallback(client, interaction);
+            command.execute(client, interaction);
             return;
         }
         
         if (interaction.isAutocomplete()) {
-            const commandAutoComplete = client.autocompleteCommands.get(interaction.commandName);
-            if (!commandAutoComplete) return;
+            const command = client.autocompleteCommands.get(interaction.commandName);
+            if (!command) return;
 
-            commandAutoComplete(client, interaction);
+            command.executeAutocomplete(client, interaction);
             return;
         }
     }
