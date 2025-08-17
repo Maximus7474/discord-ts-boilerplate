@@ -12,6 +12,7 @@ export default class SlashCommand {
 
     private logger: Logger;
     private guildSpecific: boolean = false;
+    private hideFromHelp: boolean = false;
     private commandData: SlashCommandBuilders;
     private callback: (logger: Logger, client: DiscordClient, interaction: ChatInputCommandInteraction) => Promise<void>;
     private setup?: (logger: Logger, client: DiscordClient) => Promise<void>;
@@ -23,14 +24,16 @@ export default class SlashCommand {
      * @param options - An object containing the configuration for the slash command.
      * @param options.name - The name of the slash command.
      * @param options.guildSpecific - (Optional) Whether the command is specific to a guild. Defaults to false.
+     * @param options.hideFromHelp - (Optional) Whether the command should be hidden from the help command. Defaults to false.
      * @param options.slashcommand - The SlashCommandBuilder instance containing the command's data.
      * @param options.callback - The function to execute when the command is invoked.
      * @param options.setup - (Optional) A setup function to initialize the command.
      * @param options.autocomplete - (Optional) An autocomplete function for the command's options.
      */
-    constructor({ name, guildSpecific = false, slashcommand, callback, setup, autocomplete }: SlashCommandOptions) {
+    constructor({ name, guildSpecific = false, hideFromHelp = false, slashcommand, callback, setup, autocomplete }: SlashCommandOptions) {
         this.logger = new Logger(`${magenta('CMD')}:${name}`);
         this.guildSpecific = guildSpecific;
+        this.hideFromHelp = hideFromHelp;
         this.commandData = slashcommand;
         this.callback = callback;
         this.setup = setup;
@@ -44,6 +47,15 @@ export default class SlashCommand {
      */
     isGuildSpecific (): boolean {
         return this.guildSpecific;
+    }
+
+    /**
+     * Determines whether the slash command should be listed in the help command.
+     *
+     * @returns {boolean} `true` if the command is hidden, otherwise `false`.
+     */
+    isHiddenForHelpCommand (): boolean {
+        return this.hideFromHelp;
     }
 
     /**
