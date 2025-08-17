@@ -16,11 +16,12 @@ export default new SlashCommand({
             return;
         }
 
+        const locale = interaction.locale;
         const memberPermissions = interaction.memberPermissions;
 
         const helpEmbed = new EmbedBuilder()
             .setColor('#0099ff')
-            .setTitle('Available Commands');
+            .setTitle('Application Commands');
 
         client.commands.forEach(command => {
             const commandData = command.register();
@@ -31,13 +32,15 @@ export default new SlashCommand({
                 ? BigInt(requiredPermissions)
                 : null;
 
-
             const hasPermission = !resolvedPermissions || memberPermissions.has(resolvedPermissions);
 
             if (commandData.description && hasPermission) {
+                const commandName = commandData.name_localizations?.[locale] ?? commandData.name;
+                const description = commandData.description_localizations?.[locale] ?? commandData.description;
+
                 helpEmbed.addFields({
-                    name: `/${commandData.name}`,
-                    value: commandData.description,
+                    name: `/${commandName}`,
+                    value: description,
                     inline: false,
                 });
             }
