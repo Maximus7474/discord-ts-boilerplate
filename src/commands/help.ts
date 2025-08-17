@@ -4,6 +4,7 @@ import SlashCommand from "../classes/slash_command";
 export default new SlashCommand({
     name: 'help',
     guildSpecific: false,
+    hideFromHelp: true,
     slashcommand: new SlashCommandBuilder()
         .setName('help')
         .setDescription('Displays a list of all available commands.'),
