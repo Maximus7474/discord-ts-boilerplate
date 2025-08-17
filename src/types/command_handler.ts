@@ -7,6 +7,7 @@ export type SlashCommandBuilders = SlashCommandBuilder | SlashCommandOptionsOnly
 export interface SlashCommandOptions {
     name: string;
     guildSpecific?: boolean;
+    hideFromHelp?: boolean;
     slashcommand: SlashCommandBuilders;
     callback: (logger: Logger, client: DiscordClient, interaction: ChatInputCommandInteraction) => Promise<void>;
     setup?: (logger: Logger, client: DiscordClient) => Promise<void>;
