@@ -4,6 +4,7 @@ import SlashCommand from "../classes/slash_command";
 export default new SlashCommand({
     name: 'ping',
     guildSpecific: true,
+    hideFromHelp: false,
     slashcommand: new SlashCommandBuilder()
         .setName('ping')
         .setDescription('Ping the bot to check if it is alive !'),

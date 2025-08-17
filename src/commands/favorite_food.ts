@@ -6,6 +6,7 @@ import SlashCommand from "../classes/slash_command";
 export default new SlashCommand({
     name: "testautocomplete",
     guildSpecific: false,
+    hideFromHelp: false,
     slashcommand: new SlashCommandBuilder()
         .setName("favoritefruit")
         .setDescription("A question to test autocomplete.")
