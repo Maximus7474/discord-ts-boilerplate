@@ -27,7 +27,14 @@ export default new SlashCommand({
         for (const [, cmd] of client.commands) {
             const commandData = cmd.register();
 
-            if (cmd.isHiddenForHelpCommand()) continue;
+            if (
+                    cmd.isHiddenForHelpCommand()
+                || (
+                        commandData.contexts
+                    && interaction.context
+                    && commandData.contexts.includes(interaction.context)
+                )
+            ) continue;
             
             const requiredPermissions = commandData.default_member_permissions;
 
