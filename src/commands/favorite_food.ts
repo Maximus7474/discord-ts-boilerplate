@@ -62,7 +62,8 @@ export default new SlashCommand({
         if (selectedItem) {
             await interaction.reply({
                 content: LocalizeString(
-                    callback_localizations.selected_item, interaction.locale
+                    callback_localizations.selected_item, interaction.locale,
+                    { item: selectedItem },
                 ),
                 flags: MessageFlags.Ephemeral
             });
