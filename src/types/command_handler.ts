@@ -15,7 +15,10 @@ export interface SlashCommandOptions {
 }
 
 type CommandOptionsLocalizations = {
-    [key: string]: LocalizationMap;
+    [key: string]: {
+        name: LocalizationMap,
+        description: LocalizationMap,
+    };
 };
 
 export type LocalizationCallbacks = {
