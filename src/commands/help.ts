@@ -1,5 +1,31 @@
 import { MessageFlags, SlashCommandBuilder, EmbedBuilder } from "discord.js";
 import SlashCommand from "../classes/slash_command";
+import { CommandCallbackLocalizations, CommandLocalization } from "@types";
+import { LocalizeString } from "../utils/utils";
+
+const command_localization: CommandLocalization = {
+    name: {
+        'fr': 'aide',
+        'de': 'hilfe',
+    },
+    description: {
+        'fr': 'Afficher une liste de commandes disponibles.',
+        'de': 'Eine Liste der verfügbaren Befehle anzeigen.',
+    }
+};
+
+const callback_localizations: CommandCallbackLocalizations = {
+    invalid_context: {
+        default: 'This command only works in a server.',
+        'fr': 'Cette commande ne fonctionne que sur un serveur.',
+        'de': 'Dieser Befehl funktioniert nur auf einem Server.',
+    },
+    application_commands: {
+        default: 'Application Commands',
+        'fr': 'Commandes de l\'application',
+        'de': 'Anwendungsbefehle',
+    },
+}
 
 export default new SlashCommand({
     name: 'help',
@@ -7,22 +33,31 @@ export default new SlashCommand({
     hideFromHelp: true,
     slashcommand: new SlashCommandBuilder()
         .setName('help')
-        .setDescription('Displays a list of all available commands.'),
+        .setNameLocalizations(command_localization.name)
+        .setDescription('Displays a list of all available commands.')
+        .setDescriptionLocalizations(command_localization.description),
     callback: async (logger, client, interaction) => {
+        const locale = interaction.locale;
+
         if (!interaction.inGuild()) {
             await interaction.reply({
-                content: "This command only works in a server.",
+                content: LocalizeString(
+                    callback_localizations.invalid_context,
+                    locale
+                ),
                 flags: MessageFlags.Ephemeral,
             });
             return;
         }
 
-        const locale = interaction.locale;
         const memberPermissions = interaction.memberPermissions;
 
         const helpEmbed = new EmbedBuilder()
             .setColor('#0099ff')
-            .setTitle('Application Commands');
+            .setTitle(LocalizeString(
+                callback_localizations.application_commands,
+                locale
+            ));
 
         for (const [, cmd] of client.commands) {
             const commandData = cmd.register();
