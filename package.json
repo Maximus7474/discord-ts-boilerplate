@@ -1,6 +1,6 @@
 {
   "name": "discord-ts-boilerplate",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "Discord bot built in TypeScript using discord.js",
   "main": "dist/index.js",
   "type": "module",
