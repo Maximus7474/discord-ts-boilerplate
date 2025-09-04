@@ -40,7 +40,7 @@ export default (client: DiscordClient) => {
         });
     }
 
-    client.once('ready', async () => {
+    client.once('clientReady', async () => {
         await initialiseStaticMessage(client);
     });
 }
