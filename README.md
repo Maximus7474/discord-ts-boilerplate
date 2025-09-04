@@ -31,57 +31,61 @@ Here are the guides for the "Configuring" sections, expanded with details and ex
 
 ## 🗄️ Database Setup
 
-The bot supports multiple database systems, allowing you to choose the best fit for your project. To set up your desired database:
+The bot uses **Prisma** as its ORM (Object-Relational Mapper) to interact with the database. By default, it's configured to use **SQLite**, making initial setup simple and quick since SQLite is file-based and requires no separate server.
 
-1.  **Run the Database Setup Script:**
-   Navigate to your project's root directory in your terminal and run using your used package manager:
+### Changing the Database Provider
 
-   ```bash
-   npm run setup-db
-   pnpm run setup-db
-   yarn run setup-db
-   ```
+If you need to change from SQLite to a different database like PostgreSQL or MySQL, you can do so by modifying the Prisma schema.
 
-   This interactive script will guide you through:
+1.  **Modify the `schema.prisma` file:** Open the `prisma/schema.prisma` file. Locate the `datasource db` block and change the `provider` field to your desired database.
 
-   * Detecting your package manager (npm, pnpm, or yarn).
-   * Prompting you to uninstall any previously installed database connector dependencies to avoid conflicts.
-   * Presenting a list of supported database connectors (SQLite, MySQL/MariaDB, PostgreSQL).
-   * Installing the chosen database package and its necessary TypeScript types (e.g., `better-sqlite3` and `@types/better-sqlite3`).
-   * Updating the core database handler file (`./src/utils/database/handler.ts`) to use the selected connector.
+    ```prisma
+    // For PostgreSQL
+    datasource db {
+      provider = "postgresql"
+      url      = env("DATABASE_URL")
+    }
 
-2.  **Configure `.env` variables:**
-    After running the setup script, you'll need to configure your `.env` file with the connection details for your chosen database. **Only add the variables relevant to your chosen database connector.**
+    // For MySQL
+    datasource db {
+      provider = "mysql"
+      url      = env("DATABASE_URL")
+    }
+    ```
 
-    **Example `.env` fields:**
+2.  **Update the `.env` file:** Change the `DATABASE_URL` in your `.env` file to match your new database's connection string.
 
-      * **For SQLite:**
+    ```env
+    # For PostgreSQL
+    DATABASE_URL="postgresql://user:password@host:port/database?schema=public"
 
-        ```bash
-        SQLITE_PATH=data.db
-        ```
+    # For MySQL
+    DATABASE_URL="mysql://user:password@host:port/database"
+    ```
 
-        *(Leave other SQL-related fields commented out or empty)*
+-----
 
-      * **For MySQL/MariaDB or PostgreSQL:**
+### Step-by-Step Guide for Schema Changes
 
-        ```bash
-        SQL_HOST="localhost"
-        # Port can be undefined as it'll fallback on the default one for the system
-        SQL_PORT=3306
-        SQL_USER="root"
-        SQL_DATABASE="database_name"
-        SQL_PASSWORD="root"
-        ```
+When you make changes to your database schema in the `prisma/schema.prisma` file, you need to follow these steps to apply those changes to your database.
 
-        *(Leave `SQLITE_PATH` commented out or empty)*
+1.  **Generate the Prisma Client:** After editing your schema, run the `prisma generate` command. This command updates the generated Prisma Client with the new types and methods, ensuring your code remains type-safe.
 
-**Important Notes:**
+    ```bash
+    pnpm prisma generate
+    ```
 
-  * **Database Schema:** Ensure you have a corresponding SQL schema file for your chosen database (e.g., `sqlite-base.sql`, `mysql-base.sql`, `postgres-base.sql`) in the `database_handlers` directory. The `init()` method of your chosen handler will attempt to run this script.
-  * **Dependency Management:** The project prioritizes minimal dependencies. The `setup-db.js` script ensures that only the required database driver and its types are installed, preventing unnecessary packages from bloating your `node_modules`.
-  * **Future Contributions:** While the current system covers the main database types, contributions for additional database systems are welcome, following the existing structure.
-  * **Initializing:** When starting the script for the first time you'll need to add the `--build-db` flag, this will take the contents of the `base.sql` file and run all queries located within. This is set as a manual step because it is not necessary to be run at every startup of the bot.
+2.  **Run a Migration:** To apply the schema changes to your actual database, you'll use Prisma Migrate. The `migrate dev` command creates a new migration file and applies it.
+
+    ```bash
+    pnpm prisma migrate dev --name <migration_name>
+    ```
+
+    Replace `<migration_name>` with a descriptive name for your changes (e.g., `add-user-model`). This process ensures your database schema stays in sync with your Prisma schema.
+
+For more detailed information on Prisma, including advanced migration strategies and different data modeling techniques, you can refer to the official documentation. 📖
+
+**Prisma Documentation:** [https://www.prisma.io/docs/](https://www.google.com/search?q=https://www.prisma.io/docs/)
 
 ---
 
