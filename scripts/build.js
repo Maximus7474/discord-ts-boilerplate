@@ -6,7 +6,6 @@ import path from "path";
 import { fileURLToPath } from 'url';
 import pkg from 'colors';
 const { red, green, blue } = pkg;
-import migrateSQLFiles from "./migrate_database_templats.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -88,8 +87,5 @@ exec("tsc", async (error, stdout, stderr) => {
             console.error(red(`❌ Failed to add .js extensions: ${extError}`));
             process.exit(1);
         }
-
-        migrateSQLFiles();
-        console.log(green("\n✅ SQL files migrated to dist folder."));
     }
 });
