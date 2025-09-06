@@ -49,11 +49,12 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          NEW_VERSION=${{ github.ref_name }}
           CURRENT_VERSION=$(jq -r '.version' package.json)
-          if [ "v$CURRENT_VERSION" != "${{ github.ref_name }}" ]; then
-            pnpm version ${{ github.ref_name }} --git-tag-version false
-          else
-            echo "Version in package.json is already up-to-date."
+
+          if [ "v$CURRENT_VERSION" != "$NEW_VERSION" ]; then
+            pnpm version $NEW_VERSION --git-tag-version false
           fi
 
       - name: Update repository
@@ -65,7 +66,7 @@ jobs:
             git commit -am 'chore(package): updated version to ${{ github.ref_name }}'
             git push origin HEAD:${{ github.event.repository.default_branch }}
           else
-            echo "No changes to commit."
+            echo "No changes made to pacakge.json"
           fi
 
       - name: Create Release
