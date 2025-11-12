@@ -61,6 +61,9 @@ If you need to change from SQLite to a different database like PostgreSQL or MyS
 
     # For MySQL
     DATABASE_URL="mysql://user:password@host:port/database"
+
+    # For SQLite
+    DATABASE_URL="file:./data.db"
     ```
 
 -----
