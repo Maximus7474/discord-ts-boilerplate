@@ -1,0 +1,2 @@
+- [ ] Update prisma
+- [ ] Consider locale system
