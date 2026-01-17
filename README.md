@@ -16,12 +16,14 @@
 
 ## 📦 Setup
 
-1. Copy the `.env.example` file to `.env`:
+1. Install [bun](https://bun.sh) (used for building)
+   
+2. Copy the `.env.example` file to `.env`:
    ```bash
    cp .env.template .env
    ```
 
-2. Replace the following values in the `.env` file:
+3. Replace the following values in the `.env` file:
    - `DISCORD_BOT_TOKEN`: Your bot's authentication token from Discord's developer portal.
    - `MAIN_GUILD_ID`: The Discord ID of your main guild.
 
@@ -75,13 +77,13 @@ When you make changes to your database schema in the `prisma/schema.prisma` file
 1.  **Generate the Prisma Client:** After editing your schema, run the `prisma generate` command. This command updates the generated Prisma Client with the new types and methods, ensuring your code remains type-safe.
 
     ```bash
-    pnpm prisma generate
+    bun prisma generate
     ```
 
 2.  **Run a Migration:** To apply the schema changes to your actual database, you'll use Prisma Migrate. The `migrate dev` command creates a new migration file and applies it.
 
     ```bash
-    pnpm prisma migrate dev --name <migration_name>
+    bun prisma migrate dev --name <migration_name>
     ```
 
     Replace `<migration_name>` with a descriptive name for your changes (e.g., `add-user-model`). This process ensures your database schema stays in sync with your Prisma schema.
@@ -338,11 +340,11 @@ Building the project does not deploy the slash commands to Discord's API. You mu
 ### Deployment Steps:
 1. Build the project:
    ```bash
-   pnpm run build
+   bun run build
    ```
 2. Deploy the slash commands:
    ```bash
-   pnpm run deploy
+   bun run deploy
    ```
 
 **Important:**  
@@ -352,76 +354,76 @@ The deploy script reads command data from the `dist/` directory. Ensure you run 
 
 ## 💿 Available Scripts
 
-This project comes with several pre-defined scripts to streamline development, deployment, and management tasks. You can run them using your package manager (e.g., `npm run <script-name>`, `pnpm run <script-name>`, or `yarn <script-name>`).
+This project comes with several pre-defined scripts to streamline development, deployment, and management tasks. These are all built with using bun in mind.
 
 ### Development Commands
 
-  * `pnpm run dev`
+  * `bun run dev`
 
       * This is your primary command for local development. It starts the bot in watch mode using `tsx`, automatically recompiling and restarting the application whenever you make changes to your source files.
       * **Usage:**
         ```bash
-        pnpm run dev
+        bun run dev
         ```
 
-  * `pnpm run lint`
+  * `bun run lint`
 
       * Runs ESLint to check your TypeScript source code (`src/**/*.ts`) for potential errors, style inconsistencies, and adherence to defined coding standards.
       * **Usage:**
         ```bash
-        pnpm run lint
+        bun run lint
         ```
 
-  * `pnpm run clear-commands`
+  * `bun run clear-commands`
 
       * A utility script to unregister all previously deployed Discord application commands (global or guild).
       * **Usage:**
         ```bash
-        pnpm run clear-commands
+        bun run clear-commands
         ```
 
 ### Build & Deployment Commands
 
-  * `pnpm run build`
+  * `bun run build`
 
       * Compiles your TypeScript source code (`src/`) into production-ready JavaScript files (`dist/`).
       * **Usage:**
         ```bash
-        pnpm run build
+        bun run build
         ```
 
-  * `pnpm run deploy`
+  * `bun run deploy`
 
       * Registers your Discord application commands with the Discord API. This makes your bot's slash commands visible and usable in Discord servers. This requires the project to have been already built.
       * **Usage:**
         ```bash
-        pnpm run deploy
+        bun run deploy
         ```
 
-  * `pnpm run dev-deploy`
+  * `bun run dev-deploy`
 
-      * A convenient compound command that first builds your project (`pnpm run build`) and then immediately deploys your Discord application commands (`pnpm run deploy`).
+      * A convenient compound command that first builds your project (`bun run build`) and then immediately deploys your Discord application commands (`bun run deploy`).
       * **Usage:**
         ```bash
-        pnpm run dev-deploy
+        bun run dev-deploy
         ```
 
-  * `pnpm run start`
+  * `bun run start`
 
       * Runs the compiled JavaScript version of your bot from the `dist/` directory.
       * **Usage:**
         ```bash
-        pnpm run start
+        bun run start
         ```
 
 ### Database Management Commands
 
-  * `pnpm run setup-db`
+  * `bun run setup-db`
       * This interactive script guides you through setting up your preferred database connector. It will detect your package manager, help you install the necessary database driver and its types, and configure the bot's internal database handler.
       **You must run this script before using the bot for the first time or if you wish to switch database types.**
       * **Usage:**
         ```bash
-        pnpm run setup-db
+        bun run setup-db
         ```
       * **Note:** After running this, remember to configure the appropriate database connection details in your `.env` file as described in the [Database Management](#️-database-management) section.
 
